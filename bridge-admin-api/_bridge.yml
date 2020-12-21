@@ -1,0 +1,9 @@
+# Font size for the code editor. Default is 14.
+editorFontSize: 14
+# All posts page.
+post_list_itemsPerPage: 7
+post_list_showCategories: true
+post_list_showTags: true
+# All pages page.
+page_list_itemsPerPage: 7
+
