@@ -56,7 +56,7 @@ function getInstalled() {
     //TODO: Exclude themes when hexo 5 is launched.
     //https://github.com/hexojs/hexo/issues/3890
     for (let module in packageJson.dependencies) {
-        if (module.startsWith("hexo-")) {
+        if (module.startsWith("hexo-") && !module.startsWith("hexo-theme")) {
             let moduleInfo = allPlugins.all.plugins.find(item => item.name === module);
             if (!moduleInfo) {
                 moduleInfo = {};

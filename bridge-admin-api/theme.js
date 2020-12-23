@@ -104,6 +104,22 @@ function getInstalled() {
             );
         }
     });
+    const packageJson = require(path.join(hexo.base_dir, "package.json"));
+    for (let module in packageJson.dependencies) {
+        if (module.startsWith("hexo-theme")) {
+            let moduleInfo = allThemes.all.themes.find(item => item.name === module.substring(11) );
+            if (!moduleInfo) {
+                moduleInfo = {};
+            }
+            installed.push(
+                {
+                    ...moduleInfo,
+                    name: module,
+                    isActive: module.toLowerCase() === currentTheme
+                }
+            );
+        }
+    }
     return installed;
 }
 
