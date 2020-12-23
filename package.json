@@ -1,25 +1,37 @@
 {
-  "name": "hexo-bridge",
-  "version": "1.0.2",
-  "description": "Admin panel for websites powered by hexo.",
-"keywords": [
-    "hexo",
-    "admin",
-    "plugin",
-    "admin panel",
-  ],
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Borche Davchev",
-  "license": "GNU GPLv3",
-  "dependencies": {
-    "axios": "^0.19.2",
-    "body-parser": "^1.19.0",
-    "formidable": "^1.2.2",
-    "hexo-fs": "^2.0.0",
-    "js-yaml": "^3.13.1",
-    "serve-static": "^1.14.1"
-  }
+    "name": "hexo-bridge",
+    "version": "1.0.3",
+    "description": "Admin panel for websites powered by hexo.",
+    "keywords": [
+        "hexo",
+        "admin",
+        "plugin",
+        "admin panel",
+        "hexo admin panel"
+    ],
+    "bugs": {
+        "url": "https://github.com/DeepSpaceHarbor/hexo-bridge/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DeepSpaceHarbor/hexo-bridge.git"
+    },
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": {
+        "name": "Borche Davchev",
+        "email": "hello@borche.dev",
+        "url": "https://borche.dev"
+    },
+    "license": "GPL-3.0-only",
+    "dependencies": {
+        "axios": "^0.19.2",
+        "body-parser": "^1.19.0",
+        "formidable": "^1.2.2",
+        "hexo-fs": "^2.0.0",
+        "js-yaml": "^3.13.1",
+        "serve-static": "^1.14.1"
+    }
 }

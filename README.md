@@ -12,7 +12,7 @@ npm i --save hexo-bridge
 hexo server
 open http://localhost:4000/bridge/
 ```
-All issues should be reported in the [DeepSpaceHarbor/hexo-bridge](https://github.com/DeepSpaceHarbor/hexo-bridge/issues) github repository.
+
 ## Screenshots
 ![](https://raw.githubusercontent.com/DeepSpaceHarbor/hexo-bridge/develop/screenshots/posts.png)
 ![](https://raw.githubusercontent.com/DeepSpaceHarbor/hexo-bridge/develop/screenshots/file-manager.png)
