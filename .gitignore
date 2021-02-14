@@ -1,8 +1,9 @@
 bridge-client/build/
 bridge-client/node_modules/
 bridge-client/.idea/
+bridge-client/.eslintcache
 
 bridge-admin-api/www/
 bridge-admin-api/node_modules/
 bridge-admin-api/.idea/
-bridge-client/.eslintcache
+
