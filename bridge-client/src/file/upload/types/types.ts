@@ -1,5 +1,5 @@
 export type UploadResults = {
-    uploaded: number,
-    failed: number,
-    failedFiles: File[]
-}
+  uploaded: number;
+  failed: number;
+  failedFiles: File[];
+};

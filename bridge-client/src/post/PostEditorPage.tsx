@@ -12,7 +12,6 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/theme-xcode";
 import "ace-builds/src-noconflict/mode-markdown";
 import 'ace-builds/src-min-noconflict/ext-searchbox';
-import MarkdownPreview from "../shared/components/MarkdownPreview";
 import GenericError from "../shared/components/GenericError";
 import {AxiosRequestConfig} from "axios";
 import {RouteParams} from "../shared/types/router";
@@ -145,7 +144,7 @@ export default function PostEditorPage() {
                 </ButtonGroup>
             </ControlGroup>
             <div className="code-editor-preview-container">
-                <AceEditor height="85vh" width="55vw"
+                <AceEditor height="90vh" width="100vw"
                            mode="markdown" theme="xcode"
                            wrapEnabled={true}
                            value={content}
@@ -156,7 +155,7 @@ export default function PostEditorPage() {
                            fontSize={userPrefs.editorFontSize || 14}
                            showPrintMargin={false}
                            editorProps={{$blockScrolling: true}}/>
-                <MarkdownPreview content={content}/>
+                
             </div>
             <Prompt
                 when={hasUnsavedChanges}
