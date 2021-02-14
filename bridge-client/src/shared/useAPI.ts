@@ -12,7 +12,7 @@ export default function useAPI(
   const [data, setData] = useState([]);
 
   async function executeRequest() {
-    requestConfig.baseURL = "http://localhost:4000/api/";
+    requestConfig.baseURL = "/api/";
     //Why urlencoded instead of json?
     //https://github.com/axios/axios/issues/1610#issuecomment-492564113
     requestConfig.data = qs.stringify(requestConfig.data);
