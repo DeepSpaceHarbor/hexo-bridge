@@ -121,6 +121,7 @@ export default function PageEditorPage() {
             <div className="code-editor-preview-container">
                 <AceEditor height="85vh" width="55vw"
                            mode="markdown" theme="xcode"
+                           wrapEnabled={true}
                            value={content}
                            onChange={(newContent: string) => {
                                setContent(newContent)
