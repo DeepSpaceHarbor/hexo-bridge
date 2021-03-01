@@ -5,7 +5,7 @@
   "homepage": "/bridge",
   "dependencies": {
     "@blueprintjs/core": "^3.38.2",
-    "@blueprintjs/datetime": "^3.20.4",
+    "@blueprintjs/datetime": "^3.20.5",
     "@blueprintjs/select": "^3.15.4",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
