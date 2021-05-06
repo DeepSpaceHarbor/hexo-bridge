@@ -1,0 +1,47 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/bridge-admin-api"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  target-branch: develop
+- package-ecosystem: npm
+  directory: "/bridge-client"
+  schedule:
+    interval: monthly
+  open-pull-requests-limit: 10
+  target-branch: develop
+  ignore:
+  - dependency-name: "@blueprintjs/core"
+    versions:
+    - 3.39.0
+  - dependency-name: "@blueprintjs/datetime"
+    versions:
+    - 3.20.3
+    - 3.20.4
+    - 3.20.5
+  - dependency-name: "@testing-library/user-event"
+    versions:
+    - 12.6.3
+    - 12.8.0
+  - dependency-name: qs
+    versions:
+    - 6.9.6
+  - dependency-name: "@types/node"
+    versions:
+    - 14.14.22
+  - dependency-name: "@testing-library/react"
+    versions:
+    - 11.2.3
+    - 11.2.5
+  - dependency-name: "@blueprintjs/select"
+    versions:
+    - 3.15.3
+    - 3.15.4
+  - dependency-name: "@testing-library/jest-dom"
+    versions:
+    - 5.11.9
+  - dependency-name: react-ace
+    versions:
+    - 9.3.0
