@@ -23,7 +23,7 @@
     "is-text-path": "^2.0.0",
     "is-video": "^1.0.1",
     "normalize.css": "^8.0.1",
-    "qs": "^6.9.6",
+    "qs": "^6.10.1",
     "query-string": "^7.0.0",
     "react": "^17.0.1",
     "react-ace": "^9.4.0",
