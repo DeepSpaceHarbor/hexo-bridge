@@ -6,7 +6,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.44.2",
     "@blueprintjs/datetime": "^3.21.2",
-    "@blueprintjs/select": "^3.15.5",
+    "@blueprintjs/select": "^3.16.2",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^13.1.8",
