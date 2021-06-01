@@ -9,7 +9,7 @@
     "@blueprintjs/select": "^3.16.2",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
-    "@testing-library/user-event": "^13.1.8",
+    "@testing-library/user-event": "^13.1.9",
     "@types/hexo": "^3.8.5",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.0.2",
