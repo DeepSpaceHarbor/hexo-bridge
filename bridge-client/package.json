@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^13.2.1",
     "@types/hexo": "^3.8.6",
     "@types/jest": "^27.0.1",
-    "@types/node": "^15.6.1",
+    "@types/node": "^16.7.10",
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.9",
     "ace-builds": "^1.4.12",
