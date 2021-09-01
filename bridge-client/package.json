@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "/bridge",
   "dependencies": {
-    "@blueprintjs/core": "^3.47.0",
+    "@blueprintjs/core": "^3.49.0",
     "@blueprintjs/datetime": "^3.23.8",
     "@blueprintjs/select": "^3.16.6",
     "@testing-library/jest-dom": "^5.14.1",
