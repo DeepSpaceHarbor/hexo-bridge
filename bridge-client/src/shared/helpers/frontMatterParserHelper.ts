@@ -14,7 +14,7 @@ export function parsePageData(pageData: object) {
       meta.date = pageData.date || new Date().toISOString();
     }
     return { content: parsed._content, meta: meta };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error while parsing page data.", error);
     throw new Error(error);
   }
@@ -42,7 +42,7 @@ export function parsePostData(postData: object) {
       meta.date = postData.date || new Date().toISOString();
     }
     return { content: parsed._content, meta: meta };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error while parsing post data.", error);
     throw new Error(error);
   }

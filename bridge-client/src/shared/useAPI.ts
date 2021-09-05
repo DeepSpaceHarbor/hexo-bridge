@@ -29,7 +29,7 @@ export default function useAPI(
 
           const res = await executeRequest();
           setData(res.data);
-        } catch (error) {
+        } catch (error: any) {
           console.error("useAPI error.", error);
           setError(error);
         } finally {

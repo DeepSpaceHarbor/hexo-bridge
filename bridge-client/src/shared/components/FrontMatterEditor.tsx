@@ -48,7 +48,7 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
       }
       setErrorMarkers([]);
       return true;
-    } catch (error) {
+    } catch (error: any) {
       setErrorMarkers([
         {
           row: error.mark.line,
