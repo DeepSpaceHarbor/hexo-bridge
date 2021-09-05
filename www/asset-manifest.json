@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/bridge/static/css/main.36805512.chunk.css",
-    "main.js": "/bridge/static/js/main.e103c458.chunk.js",
-    "main.js.map": "/bridge/static/js/main.e103c458.chunk.js.map",
-    "runtime-main.js": "/bridge/static/js/runtime-main.6647e57c.js",
-    "runtime-main.js.map": "/bridge/static/js/runtime-main.6647e57c.js.map",
-    "static/css/2.85807461.chunk.css": "/bridge/static/css/2.85807461.chunk.css",
-    "static/js/2.7c6eda93.chunk.js": "/bridge/static/js/2.7c6eda93.chunk.js",
-    "static/js/2.7c6eda93.chunk.js.map": "/bridge/static/js/2.7c6eda93.chunk.js.map",
+    "main.css": "/bridge/static/css/main.f53a75ee.chunk.css",
+    "main.js": "/bridge/static/js/main.6a0444a4.chunk.js",
+    "main.js.map": "/bridge/static/js/main.6a0444a4.chunk.js.map",
+    "runtime-main.js": "/bridge/static/js/runtime-main.67cd3e10.js",
+    "runtime-main.js.map": "/bridge/static/js/runtime-main.67cd3e10.js.map",
+    "static/css/2.b607d522.chunk.css": "/bridge/static/css/2.b607d522.chunk.css",
+    "static/js/2.99de544c.chunk.js": "/bridge/static/js/2.99de544c.chunk.js",
+    "static/js/2.99de544c.chunk.js.map": "/bridge/static/js/2.99de544c.chunk.js.map",
     "index.html": "/bridge/index.html",
-    "static/css/2.85807461.chunk.css.map": "/bridge/static/css/2.85807461.chunk.css.map",
-    "static/css/main.36805512.chunk.css.map": "/bridge/static/css/main.36805512.chunk.css.map",
-    "static/js/2.7c6eda93.chunk.js.LICENSE.txt": "/bridge/static/js/2.7c6eda93.chunk.js.LICENSE.txt",
+    "static/css/2.b607d522.chunk.css.map": "/bridge/static/css/2.b607d522.chunk.css.map",
+    "static/css/main.f53a75ee.chunk.css.map": "/bridge/static/css/main.f53a75ee.chunk.css.map",
+    "static/js/2.99de544c.chunk.js.LICENSE.txt": "/bridge/static/js/2.99de544c.chunk.js.LICENSE.txt",
     "static/media/controll-panel.f5107ba9.png": "/bridge/static/media/controll-panel.f5107ba9.png",
     "static/media/file-excel.be8324ec.svg": "/bridge/static/media/file-excel.be8324ec.svg",
     "static/media/file-image.f88a6019.svg": "/bridge/static/media/file-image.f88a6019.svg",
@@ -23,10 +23,10 @@
     "static/media/index.css": "/bridge/static/media/icons-20.cde033c5.eot"
   },
   "entrypoints": [
-    "static/js/runtime-main.6647e57c.js",
-    "static/css/2.85807461.chunk.css",
-    "static/js/2.7c6eda93.chunk.js",
-    "static/css/main.36805512.chunk.css",
-    "static/js/main.e103c458.chunk.js"
+    "static/js/runtime-main.67cd3e10.js",
+    "static/css/2.b607d522.chunk.css",
+    "static/js/2.99de544c.chunk.js",
+    "static/css/main.f53a75ee.chunk.css",
+    "static/js/main.6a0444a4.chunk.js"
   ]
 }

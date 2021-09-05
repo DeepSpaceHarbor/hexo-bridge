@@ -42,7 +42,7 @@ async function getNewPost(newPath) {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       resolve((newPost = Post.findOne({ source: newPath.split(SOURCE_DIR)[1] })));
-    }, 1000);
+    }, 3000);
   });
 }
 
