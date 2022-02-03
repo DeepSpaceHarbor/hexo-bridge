@@ -9,7 +9,7 @@
     "@blueprintjs/select": "^3.18.0",
     "ace-builds": "^1.4.12",
     "axios": "^0.24.0",
-    "hexo-front-matter": "^2.0.0",
+    "hexo-front-matter": "^3.0.0",
     "is-audio": "0.0.0",
     "is-image": "^3.0.0",
     "is-text-path": "^2.0.0",
