@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "/bridge",
   "dependencies": {
-    "@blueprintjs/core": "^3.49.0",
+    "@blueprintjs/core": "^4.4.0",
     "@blueprintjs/datetime": "^3.23.8",
     "@blueprintjs/select": "^3.18.0",
     "ace-builds": "^1.4.12",
