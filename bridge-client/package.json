@@ -6,7 +6,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.49.0",
     "@blueprintjs/datetime": "^3.23.8",
-    "@blueprintjs/select": "^3.18.0",
+    "@blueprintjs/select": "^4.3.0",
     "ace-builds": "^1.4.12",
     "axios": "^0.26.0",
     "hexo-front-matter": "^3.0.0",
