@@ -1,5 +1,6 @@
 const fs = require("hexo-fs");
 const path = require("path");
+const frontMatterHelper = require("hexo-front-matter");
 
 let hexo = null;
 let Post = null;
@@ -77,6 +78,16 @@ async function save(id, content) {
   return "Success!";
 }
 
+async function updateContent(id, content) {
+  const currentPost = await getSinglePost(id);
+  const postPath = currentPost.full_source;
+  const parsed = frontMatterHelper.parse(currentPost.raw);
+  const metadata = (({ _content, ...others }) => ({ ...others }))(parsed);
+  const newContent = frontMatterHelper.stringify(metadata) + content;
+  await fs.writeFileSync(postPath, newContent);
+  return "Success!";
+}
+
 async function create(title, scaffold) {
   const postParameters = { title: title, layout: scaffold };
   const newPostInfo = await hexo.post.create(postParameters);
@@ -95,6 +106,7 @@ module.exports = {
   unpublish: unpublish,
   publish: publish,
   save: save,
+  updateContent: updateContent,
   create: create,
   delete: deletePost,
 };

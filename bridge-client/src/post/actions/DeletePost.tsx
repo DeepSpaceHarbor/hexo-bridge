@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import { Alert, Button, Intent } from "@blueprintjs/core";
 import useAPI from "../../shared/useAPI";
 import { Notification } from "../../shared/helpers/notification";
-import { useHistory, useParams } from "react-router-dom";
-import { RouteParams } from "../../shared/types/router";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function DeletePost() {
-  let { id } = useParams<RouteParams>();
-  let history = useHistory();
+  let { id } = useParams();
+  let navigate = useNavigate();
   //Delete post
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const { execute: deletePost } = useAPI(
+  const { loading: isDeleteInProgress, execute: deletePost } = useAPI(
     {
       method: "POST",
       url: "posts/delete",
@@ -24,7 +23,7 @@ export default function DeletePost() {
   async function onDelete() {
     try {
       await deletePost();
-      history.push("/post/all");
+      navigate("/post/all");
       window.location.reload();
     } catch (error) {
       console.error("Unable to delete post.", error);
@@ -46,7 +45,7 @@ export default function DeletePost() {
         isOpen={showDeleteAlert}
         icon={"trash"}
         intent={Intent.DANGER}
-        confirmButtonText={"Delete"}
+        confirmButtonText={isDeleteInProgress ? "Deleting ..." : "Delete"}
         cancelButtonText={"Cancel"}
         onCancel={() => setShowDeleteAlert(false)}
         onConfirm={() => onDelete()}

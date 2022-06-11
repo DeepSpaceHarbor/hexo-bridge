@@ -2,15 +2,14 @@ import React, { useState } from "react";
 import useAPI from "../../shared/useAPI";
 import { Notification } from "../../shared/helpers/notification";
 import { Alert, Button, Intent } from "@blueprintjs/core";
-import { useHistory, useParams } from "react-router-dom";
-import { RouteParams } from "../../shared/types/router";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function UnpublishPost({ savePost }: { savePost: () => void }) {
-  let { id } = useParams<RouteParams>();
-  let history = useHistory();
+  let { id } = useParams();
+  let navigate = useNavigate();
   //Unpublish post
   const [showUnpublishAlert, setShowUnpublishAlert] = useState(false);
-  const { execute: unpublishPost } = useAPI(
+  const { loading: isUnpublishInProgress, execute: unpublishPost } = useAPI(
     {
       method: "POST",
       url: "posts/draft",
@@ -23,10 +22,10 @@ export default function UnpublishPost({ savePost }: { savePost: () => void }) {
 
   async function onUnpublish() {
     try {
-      await savePost();
+      savePost();
       const res = await unpublishPost();
       // @ts-ignore
-      history.push(`/post/edit/${res.data._id}`);
+      navigate(`/post/edit/${res.data._id}`);
       window.location.reload();
     } catch (error) {
       console.error("Unable to unpublish post.", error);
@@ -50,7 +49,7 @@ export default function UnpublishPost({ savePost }: { savePost: () => void }) {
       <Alert
         isOpen={showUnpublishAlert}
         intent={Intent.PRIMARY}
-        confirmButtonText={"Unpublish"}
+        confirmButtonText={isUnpublishInProgress ? "Unpublishing ..." : "Unpublish"}
         cancelButtonText={"Cancel"}
         onCancel={() => setShowUnpublishAlert(false)}
         onConfirm={() => onUnpublish()}

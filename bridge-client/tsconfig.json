@@ -9,6 +9,11 @@
       "dom.iterable",
       "esnext"
     ],
+    "paths": {
+      "path": [
+        "./node_modules/path-browserify"
+      ]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

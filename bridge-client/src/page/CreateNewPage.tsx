@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Button, Classes, Dialog, InputGroup, Intent } from "@blueprintjs/core";
 import useAPI from "../shared/useAPI";
 import { Notification } from "../shared/helpers/notification";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateNewPage() {
-  let history = useHistory();
+  let navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [pageTitle, setPageTitle] = useState("");
-  const { execute: createPage } = useAPI(
+  const { loading: createPageLoading, execute: createPage } = useAPI(
     {
       method: "POST",
       url: "pages/create",
@@ -23,7 +23,7 @@ export default function CreateNewPage() {
     try {
       const res = await createPage();
       // @ts-ignore
-      history.push(`/page/edit/${res.data._id}`);
+      navigate(`/page/edit/${res.data._id}`);
       window.location.reload();
     } catch (error) {
       console.error("Cannot create new page.", error);
@@ -58,7 +58,7 @@ export default function CreateNewPage() {
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <span className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button text="Create page" intent={Intent.PRIMARY} onClick={onCreate} />
+            <Button text="Create page" intent={Intent.PRIMARY} onClick={onCreate} loading={createPageLoading} />
           </span>
         </div>
       </Dialog>

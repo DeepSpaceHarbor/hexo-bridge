@@ -37,7 +37,7 @@ export default function FileUpload({ currentLocation, selectedFiles, reportStatu
           },
         });
       } catch (e) {
-        console.log("Upload error:", e);
+        console.error("Upload error:", e);
         withErrors.push(selectedFiles[i]);
       }
     }

@@ -1,42 +1,38 @@
 import { useEffect, useState } from "react";
-import axios, { AxiosPromise, AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
 const qs = require("qs");
 
 export default function useAPI(
   requestConfig: AxiosRequestConfig,
   delayExecution = false
-): { loading: boolean; error: any; data: any; execute: () => AxiosPromise } {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+): { loading: boolean; error: any; data: any; execute: () => Promise<AxiosResponse<any, any> | undefined> } {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
 
   async function executeRequest() {
-    requestConfig.baseURL = "/api/";
+    requestConfig.baseURL = `${process.env.REACT_APP_API || ""}/api/`;
     //Why urlencoded instead of json?
     //https://github.com/axios/axios/issues/1610#issuecomment-492564113
     requestConfig.data = qs.stringify(requestConfig.data);
-    return axios(requestConfig);
+    try {
+      setIsLoading(true);
+      const res = await axios(requestConfig);
+      setData(res.data);
+      setError(null);
+      return res;
+    } catch (err: any) {
+      console.error("useAPI error.", err);
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   useEffect(() => {
     if (!delayExecution) {
-      const initiateRequest = async () => {
-        try {
-          setIsLoading(true);
-          setError(null);
-          setData([]);
-
-          const res = await executeRequest();
-          setData(res.data);
-        } catch (error: any) {
-          console.error("useAPI error.", error);
-          setError(error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      initiateRequest();
+      executeRequest();
     } // eslint-disable-next-line
   }, []);
 

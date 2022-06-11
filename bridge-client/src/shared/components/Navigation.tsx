@@ -9,7 +9,7 @@ export default function Navigation() {
   const location = useLocation();
 
   function getNewPageOrPost() {
-    if (location.pathname.startsWith("/post")) {
+    if (location.pathname.startsWith("/post") || location.pathname === "/") {
       return <CreateNewPost />;
     }
     if (location.pathname.startsWith("/page")) {

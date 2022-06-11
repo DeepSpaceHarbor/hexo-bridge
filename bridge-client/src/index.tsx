@@ -1,11 +1,46 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import "./index.css";
-import App from "./App";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AllPostsPage from "./post/AllPostsPage";
+import PostEditorPage from "./post/PostEditorPage";
+import AllPagesPage from "./page/AllPagesPage";
+import PageEditorPage from "./page/PageEditorPage";
+import HexoSettingsPage from "./settings/HexoSettingsPage";
+import BridgeSettingsPage from "./settings/BridgeSettingsPage";
+import ScaffoldsPage from "./settings/scaffolds/ScaffoldsPage";
+import DiscoverPluginsPage from "./plugin/discover/DiscoverPluginsPage";
+import InstalledPluginsPage from "./plugin/InstalledPluginsPage";
+import ScriptsPage from "./plugin/ScriptsPage";
+import InstalledThemesPage from "./theme/installed/InstalledThemesPage";
+import DiscoverThemesPage from "./theme/discover/DiscoverThemesPage";
+import ThemeSettingsPage from "./theme/ThemeSettingsPage";
+import FileDirectoryPage from "./file/FileDirectoryPage";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+const container = document.getElementById("app");
+if (container === null) throw new Error("Root container missing in index.html");
+const root = createRoot(container);
+
+root.render(
+  <BrowserRouter basename={"bridge"}>
+    <Routes>
+      <Route index element={<AllPostsPage />} />
+      <Route path="/" element={<AllPostsPage />} />
+      <Route path={`post`} element={<AllPostsPage />} />
+      <Route path={`post/edit/:id`} element={<PostEditorPage />} />
+      <Route path={`post/all`} element={<AllPostsPage />} />
+      <Route path={"/page/all"} element={<AllPagesPage />} />
+      <Route path={"/page/edit/:id"} element={<PageEditorPage />} />
+      <Route path={"/setting/hexo"} element={<HexoSettingsPage />} />
+      <Route path={"/setting/bridge"} element={<BridgeSettingsPage />} />
+      <Route path={"/setting/scaffolds"} element={<ScaffoldsPage />} />
+      <Route path={"/plugin/discover"} element={<DiscoverPluginsPage />} />
+      <Route path={"/plugin/installed"} element={<InstalledPluginsPage />} />
+      <Route path={"/plugin/script"} element={<ScriptsPage />} />
+      <Route path={"/theme/installed"} element={<InstalledThemesPage />} />
+      <Route path={"/theme/discover"} element={<DiscoverThemesPage />} />
+      <Route path={"/theme/config"} element={<ThemeSettingsPage />} />
+      <Route path={"/file"} element={<FileDirectoryPage />} />
+    </Routes>
+  </BrowserRouter>
 );

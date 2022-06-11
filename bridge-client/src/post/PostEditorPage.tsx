@@ -1,8 +1,8 @@
 import React, { useLayoutEffect, useState } from "react";
 import Navigation from "../shared/components/Navigation";
-import { Prompt, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useAPI from "../shared/useAPI";
-import { Button, ButtonGroup, ControlGroup, Divider, InputGroup, Intent, Popover, Spinner } from "@blueprintjs/core";
+import { Button, ButtonGroup, Card, ControlGroup, Divider, InputGroup, Intent, Spinner } from "@blueprintjs/core";
 import PostEditorActionDropdown from "./PostEditorActionDropdown";
 import { Notification } from "../shared/helpers/notification";
 import { DatePicker } from "@blueprintjs/datetime";
@@ -13,10 +13,11 @@ import "ace-builds/src-noconflict/theme-xcode";
 import "ace-builds/src-noconflict/mode-markdown";
 import "ace-builds/src-min-noconflict/ext-searchbox";
 import GenericError from "../shared/components/GenericError";
-import { AxiosRequestConfig } from "axios";
-import { RouteParams } from "../shared/types/router";
-
+import axios, { AxiosRequestConfig } from "axios";
+import { Popover2 } from "@blueprintjs/popover2";
+const qs = require("qs");
 const frontMatterHelper = require("hexo-front-matter");
+
 //API Config
 const getSinglePostAPI: AxiosRequestConfig = {
   method: "POST",
@@ -28,13 +29,18 @@ const savePostAPI: AxiosRequestConfig = {
   url: "posts/save",
 };
 
+const updatePostContentAPI: AxiosRequestConfig = {
+  method: "POST",
+  url: "posts/updateContent",
+};
+
 const getUserPrefsAPI: AxiosRequestConfig = {
   method: "GET",
   url: "settings/bridge/getAsJson",
 };
 
 export default function PostEditorPage() {
-  const { id } = useParams<RouteParams>();
+  const { id } = useParams();
   const { data: userPrefs } = useAPI(getUserPrefsAPI);
   //Get post from api, setup code editor, preview & parse front matter for metadata.
   const {
@@ -80,8 +86,8 @@ export default function PostEditorPage() {
         intent: Intent.SUCCESS,
         icon: "saved",
       });
-    } catch (error) {
-      console.error("Unable to save post.", error);
+    } catch (err) {
+      console.error("Unable to save post.", err);
       Notification.show({
         message: "Oh no, I can't save the post. 😟 ",
         intent: Intent.DANGER,
@@ -127,7 +133,26 @@ export default function PostEditorPage() {
             >
               Tags ({metadata.tags.length})
             </Button>
-            <Popover autoFocus={false}>
+            <Popover2
+              autoFocus={false}
+              content={
+                <Card
+                  style={{
+                    padding: "0px",
+                  }}
+                >
+                  <DatePicker
+                    value={new Date(metadata.date)}
+                    onChange={(selectedDate: Date, isUserChange: boolean) => {
+                      if (isUserChange) {
+                        setMetadata({ ...metadata, date: selectedDate.toISOString() });
+                        setHasUnsavedChanges(true);
+                      }
+                    }}
+                  />
+                </Card>
+              }
+            >
               <Button icon="calendar">
                 {new Date(metadata.date).toLocaleString(undefined, {
                   day: "2-digit",
@@ -135,16 +160,7 @@ export default function PostEditorPage() {
                   year: "numeric",
                 })}
               </Button>
-              <DatePicker
-                value={new Date(metadata.date)}
-                onChange={(selectedDate: Date, isUserChange: boolean) => {
-                  if (isUserChange) {
-                    setMetadata({ ...metadata, date: selectedDate.toISOString() });
-                    setHasUnsavedChanges(true);
-                  }
-                }}
-              />
-            </Popover>
+            </Popover2>
             <Divider />
             <Button
               icon="annotation"
@@ -185,21 +201,48 @@ export default function PostEditorPage() {
               setContent(newContent);
               setHasUnsavedChanges(true);
             }}
+            fontSize={userPrefs.editorFontSize || 14}
+            showPrintMargin={false}
+            editorProps={{ $blockScrolling: true }}
             setOptions={{ useWorker: false }}
             commands={[
               {
                 // commands is array of key bindings.
                 name: "SavePost",
                 bindKey: { win: "Ctrl-S", mac: "Ctrl-S" },
-                exec: () => {}, //Disable default browser behavior
+                exec: async (editor) => {
+                  let requestConfig = {
+                    ...updatePostContentAPI,
+                    data: {
+                      id: id,
+                      content: editor.getSession().getValue(),
+                    },
+                  };
+                  requestConfig.baseURL = `${process.env.REACT_APP_API || ""}/api/`;
+                  //Why urlencoded instead of json?
+                  //https://github.com/axios/axios/issues/1610#issuecomment-492564113
+                  requestConfig.data = qs.stringify(requestConfig.data);
+                  try {
+                    await axios(requestConfig);
+                    Notification.show({
+                      message: "Content updated!",
+                      intent: Intent.SUCCESS,
+                      icon: "saved",
+                      timeout: 800,
+                    });
+                  } catch (err) {
+                    console.error("Unable to save post.", err);
+                    Notification.show({
+                      message: "Oh no, I can't update the content. 😟 ",
+                      intent: Intent.DANGER,
+                      icon: "delete",
+                    });
+                  }
+                }, //Disable default browser behavior
               },
             ]}
-            fontSize={userPrefs.editorFontSize || 14}
-            showPrintMargin={false}
-            editorProps={{ $blockScrolling: true }}
           />
         </div>
-        <Prompt when={hasUnsavedChanges} message="You have unsaved changes, are you sure you want to leave?" />
       </>
     );
   }

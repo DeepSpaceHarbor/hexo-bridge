@@ -38,14 +38,14 @@ export default function FileSelection({ currentLocation, uploadFiles }: FileSele
           {({ getRootProps, getInputProps }) => (
             <div {...getRootProps()}>
               <input {...getInputProps()} />
-              <h4 className="bp3-heading bp3-text-overflow-ellipsis">Drop here to upload in /{currentLocation}</h4>
+              <h4 className="bp4-heading bp4-text-overflow-ellipsis">Drop here to upload in /{currentLocation}</h4>
               <img src={dropZoneIllustration} style={{ maxWidth: "100%" }} alt="Drop here to upload files." />
             </div>
           )}
         </Dropzone>
       </div>
       <div className={Classes.DIALOG_FOOTER}>
-        {selectedFiles.length > 0 && <h4 className="bp3-heading">Selected files: </h4>}
+        {selectedFiles.length > 0 && <h4 className="bp4-heading">Selected files: </h4>}
         {selectedFiles.map((file: File) => {
           return (
             <Tag

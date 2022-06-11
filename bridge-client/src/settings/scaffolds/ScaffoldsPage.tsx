@@ -3,7 +3,7 @@ import Navigation from "../../shared/components/Navigation";
 import NavigationSettings from "../NavigationSettings";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../../shared/useAPI";
-import { Button, ButtonGroup, ControlGroup, Intent, Menu, Popover, Spinner } from "@blueprintjs/core";
+import { Button, ButtonGroup, Card, ControlGroup, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
 import GenericError from "../../shared/components/GenericError";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/theme-xcode";
@@ -14,6 +14,7 @@ import RenameScaffold from "./RenameScaffold";
 import DeleteScaffold from "./DeleteScaffold";
 import { scaffold } from "./types";
 import NewScaffold from "./NewScaffold";
+import { Popover2 } from "@blueprintjs/popover2";
 
 // API Config
 const getAllScaffolds: AxiosRequestConfig = {
@@ -85,40 +86,59 @@ export default function ScaffoldsPage() {
     }
     return (
       <>
-        {" "}
         <ControlGroup style={{ margin: "5px" }}>
           <NewScaffold allScaffolds={allScaffolds} />
 
-          <Popover position={"bottom-right"} minimal>
+          <Popover2
+            position={"bottom"}
+            content={
+              <Card
+                style={{
+                  padding: "0px",
+                }}
+              >
+                <Menu>
+                  {allScaffolds.map((scaffold: any) => (
+                    <MenuItem
+                      text={scaffold.name}
+                      onClick={() => {
+                        setSelectedScaffold(scaffold);
+                        setHasNewChanges(false);
+                      }}
+                      active={scaffold.name === selectedScaffold.name}
+                      key={scaffold.name}
+                    />
+                  ))}
+                </Menu>
+              </Card>
+            }
+          >
             <ButtonGroup>
               <Button icon={"applications"} minimal>
                 Selected: {selectedScaffold.name}{" "}
               </Button>
               <Button icon="caret-down" minimal />
             </ButtonGroup>
-            <Menu>
-              {allScaffolds.map((scaffold: any) => (
-                <Menu.Item
-                  text={scaffold.name}
-                  onClick={() => {
-                    setSelectedScaffold(scaffold);
-                    setHasNewChanges(false);
-                  }}
-                  active={scaffold.name === selectedScaffold.name}
-                  key={scaffold.name}
-                />
-              ))}
-            </Menu>
-          </Popover>
+          </Popover2>
           <span style={{ flexGrow: 1 }} />
           <Button icon={"floppy-disk"} minimal text={"Save"} onClick={onSave} disabled={!hasNewChanges} />
-          <Popover position={"bottom"} minimal>
+          <Popover2
+            position={"bottom"}
+            content={
+              <Card
+                style={{
+                  padding: "0px",
+                }}
+              >
+                <ButtonGroup minimal vertical>
+                  <RenameScaffold selectedScaffold={selectedScaffold} allScaffolds={allScaffolds} />
+                  <DeleteScaffold selectedScaffold={selectedScaffold} />
+                </ButtonGroup>
+              </Card>
+            }
+          >
             <Button icon="caret-down" minimal />
-            <ButtonGroup minimal vertical>
-              <RenameScaffold selectedScaffold={selectedScaffold} allScaffolds={allScaffolds} />
-              <DeleteScaffold selectedScaffold={selectedScaffold} />
-            </ButtonGroup>
-          </Popover>
+          </Popover2>
         </ControlGroup>
         <AceEditor
           height="80vh"

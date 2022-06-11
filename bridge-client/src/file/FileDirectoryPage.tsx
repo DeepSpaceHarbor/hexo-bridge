@@ -3,7 +3,7 @@ import Navigation from "../shared/components/Navigation";
 import FileGrid from "./FileGrid";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../shared/useAPI";
-import { Breadcrumb, Breadcrumbs, ButtonGroup, IBreadcrumbProps, Spinner } from "@blueprintjs/core";
+import { Breadcrumb, BreadcrumbProps, Breadcrumbs, ButtonGroup, Spinner } from "@blueprintjs/core";
 import GenericError from "../shared/components/GenericError";
 import folderOpenIcon from "./icons/folder-open-small.png";
 import queryString from "query-string";
@@ -18,18 +18,22 @@ const discoverFilesAPI: AxiosRequestConfig = {
 
 export default function FileDirectoryPage() {
   const queryStringParams = queryString.parse(useLocation().search);
-  const { loading: isLoading, error, data: allFiles } = useAPI({
+  const {
+    loading: isLoading,
+    error,
+    data: allFiles,
+  } = useAPI({
     ...discoverFilesAPI,
     data: {
       directory: queryStringParams.dir,
     },
   });
-  const [currentDir, setCurrentDir] = useState<IBreadcrumbProps[]>([]);
+  const [currentDir, setCurrentDir] = useState<BreadcrumbProps[]>([]);
 
   useEffect(() => {
     if (allFiles.currentDir) {
       const pathParts = allFiles.currentDir.split(allFiles.separator);
-      let dir: IBreadcrumbProps[] = [];
+      let dir: BreadcrumbProps[] = [];
       // @ts-ignore
       for (let key in [...Array(pathParts.length).keys()]) {
         dir.push({
@@ -44,18 +48,20 @@ export default function FileDirectoryPage() {
     }
   }, [allFiles.currentDir, allFiles.separator]);
 
-  function renderCurrentBreadcrumb({ text, ...restProps }: IBreadcrumbProps) {
+  function renderCurrentBreadcrumb({ text, ...restProps }: BreadcrumbProps) {
     // customize rendering of last breadcrumb
     return <Breadcrumb {...restProps}> {text} </Breadcrumb>;
   }
 
   function getCurrentState() {
-    if (isLoading) {
-      return <Spinner />;
-    }
     if (error) {
       return <GenericError />;
     }
+
+    if (isLoading || allFiles.files === undefined) {
+      return <Spinner />;
+    }
+
     return (
       <>
         <div style={{ display: "flex" }}>

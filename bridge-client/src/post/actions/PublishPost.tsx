@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAPI from "../../shared/useAPI";
 import { Notification } from "../../shared/helpers/notification";
 import { Alert, Button, Intent } from "@blueprintjs/core";
-import { RouteParams } from "../../shared/types/router";
 
 export default function PublishPost({ savePost }: { savePost: () => void }) {
-  let { id } = useParams<RouteParams>();
-  let history = useHistory();
+  let { id } = useParams();
+  let navigate = useNavigate();
 
   //Publish post
   const [showPublishAlert, setShowPublishAlert] = useState(false);
-  const { execute: publishPost } = useAPI(
+  const { loading: isPublishInProgress, execute: publishPost } = useAPI(
     {
       method: "POST",
       url: "posts/publish",
@@ -24,10 +23,10 @@ export default function PublishPost({ savePost }: { savePost: () => void }) {
 
   async function onPublish() {
     try {
-      await savePost();
+      savePost();
       const res = await publishPost();
       // @ts-ignore
-      history.push(`/post/edit/${res.data._id}`);
+      navigate(`/post/edit/${res.data._id}`);
       window.location.reload();
     } catch (error) {
       console.error("Unable to publish post.", error);
@@ -47,7 +46,7 @@ export default function PublishPost({ savePost }: { savePost: () => void }) {
       <Alert
         isOpen={showPublishAlert}
         intent={Intent.PRIMARY}
-        confirmButtonText={"Publish"}
+        confirmButtonText={isPublishInProgress ? "Publishing ..." : "Publish"}
         cancelButtonText={"Cancel"}
         onCancel={() => setShowPublishAlert(false)}
         onConfirm={() => onPublish()}

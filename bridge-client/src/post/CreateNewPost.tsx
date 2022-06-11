@@ -1,11 +1,12 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import useAPI from "../shared/useAPI";
 import { Notification } from "../shared/helpers/notification";
-import { Button, Classes, Dialog, InputGroup, Intent, Menu, Popover, Position, MenuItem } from "@blueprintjs/core";
+import { Button, Classes, Dialog, InputGroup, Intent, Menu, Position, MenuItem, Card } from "@blueprintjs/core";
+import { Popover2 } from "@blueprintjs/popover2";
 
 export default function CreateNewPost() {
-  let history = useHistory();
+  let navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [postTitle, setPostTitle] = useState("");
   const [selectedScaffold, setSelectedScaffold] = useState("post");
@@ -14,7 +15,7 @@ export default function CreateNewPost() {
     url: "scaffolds/getAllNames",
   });
 
-  const { execute: createPost } = useAPI(
+  const { loading: createPostLoading, execute: createPost } = useAPI(
     {
       method: "POST",
       url: "posts/create",
@@ -30,7 +31,7 @@ export default function CreateNewPost() {
     try {
       const res = await createPost();
       // @ts-ignore
-      history.push(`/post/edit/${res.data._id}`);
+      navigate(`/post/edit/${res.data._id}`);
       window.location.reload();
     } catch (error) {
       console.error("Cannot create new post.", error);
@@ -44,24 +45,30 @@ export default function CreateNewPost() {
 
   function getScaffoldMenuItems() {
     return (
-      <Menu>
-        {allScaffolds.map((scaffold: string) => {
-          if (scaffold === "page") {
-            // eslint-disable-next-line array-callback-return
-            return;
-          }
-          return (
-            <MenuItem
-              onClick={() => {
-                setSelectedScaffold(scaffold);
-              }}
-              text={scaffold}
-              key={scaffold}
-              active={scaffold === selectedScaffold}
-            />
-          );
-        })}
-      </Menu>
+      <Card
+        style={{
+          padding: "0px",
+        }}
+      >
+        <Menu>
+          {allScaffolds.map((scaffold: string) => {
+            if (scaffold === "page") {
+              // eslint-disable-next-line array-callback-return
+              return;
+            }
+            return (
+              <MenuItem
+                onClick={() => {
+                  setSelectedScaffold(scaffold);
+                }}
+                text={scaffold}
+                key={scaffold}
+                active={scaffold === selectedScaffold}
+              />
+            );
+          })}
+        </Menu>
+      </Card>
     );
   }
 
@@ -93,18 +100,18 @@ export default function CreateNewPost() {
             }}
           />
 
-          <Popover content={getScaffoldMenuItems()} position={Position.RIGHT_TOP}>
+          <Popover2 content={getScaffoldMenuItems()} position={Position.BOTTOM}>
             <Button
               outlined
               text={`Use scaffold: ${selectedScaffold}`}
               icon="applications"
               style={{ backgroundColor: "white" }}
             />
-          </Popover>
+          </Popover2>
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <span className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button text="Create post" intent={Intent.PRIMARY} onClick={onCreate} />
+            <Button text="Create post" intent={Intent.PRIMARY} onClick={onCreate} loading={createPostLoading} />
           </span>
         </div>
       </Dialog>

@@ -1,5 +1,6 @@
 const fs = require("hexo-fs");
 const path = require("path");
+const frontMatterHelper = require("hexo-front-matter");
 
 let hexo = null;
 let Page = null;
@@ -29,6 +30,16 @@ async function save(id, content) {
   const currentPage = await getSinglePage(id);
   const pagePath = currentPage.full_source;
   await fs.writeFileSync(pagePath, content);
+  return "Success!";
+}
+
+async function updateContent(id, content) {
+  const currentPage = await getSinglePage(id);
+  const pagePath = currentPage.full_source;
+  const parsed = frontMatterHelper.parse(currentPage.raw);
+  const metadata = (({ _content, ...others }) => ({ ...others }))(parsed);
+  const newContent = frontMatterHelper.stringify(metadata) + content;
+  await fs.writeFileSync(pagePath, newContent);
   return "Success!";
 }
 
@@ -62,6 +73,7 @@ module.exports = {
   getAll: getAllPages,
   getSingle: getSinglePage,
   save: save,
+  updateContent: updateContent,
   delete: deletePage,
   create: create,
 };

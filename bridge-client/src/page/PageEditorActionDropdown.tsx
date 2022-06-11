@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useHistory, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAPI from "../shared/useAPI";
-import { Alert, AnchorButton, Button, ButtonGroup, Intent, Popover } from "@blueprintjs/core";
+import { Alert, AnchorButton, Button, ButtonGroup, Card, Intent } from "@blueprintjs/core";
 import { Notification } from "../shared/helpers/notification";
 import { AxiosRequestConfig } from "axios";
-import { RouteParams } from "../shared/types/router";
+import { Popover2 } from "@blueprintjs/popover2";
 
 //API Config
 const getSinglePageAPI: AxiosRequestConfig = {
@@ -18,8 +18,8 @@ const deletePageAPI: AxiosRequestConfig = {
 };
 
 export default function PageEditorActionDropdown({ savePage }: { savePage: () => void }) {
-  let { id } = useParams<RouteParams>();
-  let history = useHistory();
+  let { id } = useParams();
+  let navigate = useNavigate();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { loading: isLoading, data: page } = useAPI({
@@ -29,9 +29,9 @@ export default function PageEditorActionDropdown({ savePage }: { savePage: () =>
     },
   });
 
-  //Delete post
+  //Delete page
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const { execute: deletePage } = useAPI(
+  const { loading: isDeleteInProgress, execute: deletePage } = useAPI(
     {
       ...deletePageAPI,
       data: {
@@ -44,7 +44,7 @@ export default function PageEditorActionDropdown({ savePage }: { savePage: () =>
   async function onDelete() {
     try {
       await deletePage();
-      history.push("/page/all");
+      navigate("/page/all");
       window.location.reload();
     } catch (error) {
       console.error("Unable to delete page.", error);
@@ -59,23 +59,33 @@ export default function PageEditorActionDropdown({ savePage }: { savePage: () =>
     return (
       <>
         <AnchorButton icon="share" text="Preview" href={`/${page.path}`} target="_blank" rel="noopener noreferrer" />
-        <Popover position="bottom" minimal>
-          <Button icon="caret-down" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
-          <ButtonGroup minimal vertical>
-            <Button
-              icon="trash"
-              text="Delete"
-              onClick={() => {
-                setShowDeleteAlert(true);
+        <Popover2
+          position="bottom"
+          content={
+            <Card
+              style={{
+                padding: "0px",
               }}
-            />
-          </ButtonGroup>
-        </Popover>
+            >
+              <ButtonGroup minimal vertical>
+                <Button
+                  icon="trash"
+                  text="Delete"
+                  onClick={() => {
+                    setShowDeleteAlert(true);
+                  }}
+                />
+              </ButtonGroup>
+            </Card>
+          }
+        >
+          <Button icon="caret-down" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
+        </Popover2>
         <Alert
           isOpen={showDeleteAlert}
           icon="trash"
           intent={Intent.DANGER}
-          confirmButtonText="Delete"
+          confirmButtonText={isDeleteInProgress ? "Deleting ..." : "Delete"}
           cancelButtonText="Cancel"
           onOpened={() => setIsDropdownOpen(false)}
           onCancel={() => setShowDeleteAlert(false)}

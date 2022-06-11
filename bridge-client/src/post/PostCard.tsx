@@ -1,8 +1,8 @@
 import React from "react";
-import { Elevation, MenuItem } from "@blueprintjs/core";
+import { Elevation, MenuItem, Button, Card, Divider, Menu } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
-import { Button, Card, Divider, Menu, Popover } from "@blueprintjs/core";
 import type { Category, Post, Tag } from "./types/types";
+import { Popover2 } from "@blueprintjs/popover2";
 
 type PostCardProps = {
   post: Post;
@@ -21,14 +21,24 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
       return <Button minimal text={`Categories (${post.categories.length})`} className="force-text-muted" />;
     }
     return (
-      <Popover position="right">
+      <Popover2
+        position="right"
+        content={
+          <Card
+            style={{
+              padding: "0px",
+            }}
+          >
+            <Menu>
+              {post.categories.data.map((category: Category) => {
+                return <MenuItem key={category.name} text={category.name} />;
+              })}
+            </Menu>
+          </Card>
+        }
+      >
         <Button minimal text={`Categories (${post.categories.length})`} className="force-text-muted" />
-        <Menu>
-          {post.categories.data.map((category: Category) => {
-            return <MenuItem key={category.name} text={category.name} />;
-          })}
-        </Menu>
-      </Popover>
+      </Popover2>
     );
   }
 
@@ -40,14 +50,24 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
       return <Button minimal text={`Tags (${post.tags.length})`} className="force-text-muted" />;
     }
     return (
-      <Popover position="right">
+      <Popover2
+        position="right"
+        content={
+          <Card
+            style={{
+              padding: "0px",
+            }}
+          >
+            <Menu>
+              {post.tags.data.map((tag: Tag) => {
+                return <MenuItem key={tag.name} text={tag.name} />;
+              })}
+            </Menu>
+          </Card>
+        }
+      >
         <Button minimal text={`Tags (${post.tags.length})`} className="force-text-muted" />
-        <Menu>
-          {post.tags.data.map((tag: Tag) => {
-            return <MenuItem key={tag.name} text={tag.name} />;
-          })}
-        </Menu>
-      </Popover>
+      </Popover2>
     );
   }
 
@@ -57,7 +77,7 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
         <b>{post.title}</b>
       </Link>
       <Divider />
-      <div className="bp3-text-muted" style={{ display: "flex" }}>
+      <div className="bp4-text-muted" style={{ display: "flex" }}>
         <span>
           {new Date(post.date).toLocaleString(undefined, {
             day: "2-digit",

@@ -16,7 +16,7 @@ export default function PageCard({ page, selectedPage, setSelectedPage }: PageCa
         <b>{page.title}</b>
       </Link>
       <Divider />
-      <p className="bp3-text-muted">
+      <p className="bp4-text-muted">
         {new Date(page.date).toLocaleString(undefined, {
           day: "2-digit",
           month: "short",
