@@ -88,6 +88,16 @@ hexo.extend.filter.register("server_middleware", (app) => {
     }
   });
 
+  app.use(hexo.config.root + "api/posts/updateContent", async function (req, res) {
+    try {
+      const result = await posts.updateContent(req.body.id, req.body.content);
+      res.sendSuccess(result);
+    } catch (error) {
+      console.error(error);
+      res.sendError("Sorry, something went wrong.");
+    }
+  });
+
   app.use(hexo.config.root + "api/posts/create", async function (req, res) {
     try {
       const post = await posts.create(req.body.title, req.body.scaffold);
@@ -178,6 +188,16 @@ hexo.extend.filter.register("server_middleware", (app) => {
   app.use(hexo.config.root + "api/pages/save", async function (req, res) {
     try {
       const result = await pages.save(req.body.id, req.body.content);
+      res.sendSuccess(result);
+    } catch (error) {
+      console.error(error);
+      res.sendError("Sorry, something went wrong.");
+    }
+  });
+
+  app.use(hexo.config.root + "api/pages/updateContent", async function (req, res) {
+    try {
+      const result = await pages.updateContent(req.body.id, req.body.content);
       res.sendSuccess(result);
     } catch (error) {
       console.error(error);
