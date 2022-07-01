@@ -6,7 +6,7 @@
   "dependencies": {
     "@blueprintjs/core": "^4.5.0",
     "@blueprintjs/datetime": "^4.3.0",
-    "@blueprintjs/popover2": "^1.4.0",
+    "@blueprintjs/popover2": "^1.4.1",
     "@blueprintjs/select": "^4.4.0",
     "ace-builds": "^1.6.0",
     "axios": "^0.27.2",
