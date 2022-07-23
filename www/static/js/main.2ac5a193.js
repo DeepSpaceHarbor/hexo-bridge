@@ -57457,11 +57457,7 @@
 					l = c((0, i.useState)(""), 2),
 					u = l[0],
 					h = l[1];
-					
-				var m = ZA({
-					method: "GET",
-					url: "settings/bridge/getAsJson"
-				}).data;
+				
 
 				function d() {
 					return (d = YA(GA().mark((function e() {
@@ -57480,7 +57476,7 @@
 										.append("directory", t), e.prev = 8, e
 										.next = 11, QA()({
 											method: "POST",
-											url: "http://"+m.host+"/api/assets/upload",
+											url: "https://hexo.dongyulong.online/api/assets/upload",
 											data: s,
 											headers: {
 												"Content-Type": 'multipart/form-data"'
