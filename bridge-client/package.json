@@ -8,7 +8,7 @@
     "@blueprintjs/datetime": "^4.3.0",
     "@blueprintjs/popover2": "^1.4.0",
     "@blueprintjs/select": "^4.4.0",
-    "ace-builds": "^1.6.0",
+    "ace-builds": "^1.8.1",
     "axios": "^0.27.2",
     "hexo-front-matter": "^3.0.0",
     "is-audio": "0.0.0",
