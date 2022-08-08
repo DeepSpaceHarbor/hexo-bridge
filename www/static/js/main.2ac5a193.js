@@ -57476,7 +57476,7 @@
 										.append("directory", t), e.prev = 8, e
 										.next = 11, QA()({
 											method: "POST",
-											url: "https://hexo.dongyulong.online/api/assets/upload",
+											url: "http://localhost:4000/api/assets/upload",
 											data: s,
 											headers: {
 												"Content-Type": 'multipart/form-data"'
