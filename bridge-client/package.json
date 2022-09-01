@@ -5,7 +5,7 @@
   "homepage": "/bridge",
   "dependencies": {
     "@blueprintjs/core": "^4.5.0",
-    "@blueprintjs/datetime": "^4.3.0",
+    "@blueprintjs/datetime": "^4.3.9",
     "@blueprintjs/popover2": "^1.4.0",
     "@blueprintjs/select": "^4.4.0",
     "ace-builds": "^1.6.0",
