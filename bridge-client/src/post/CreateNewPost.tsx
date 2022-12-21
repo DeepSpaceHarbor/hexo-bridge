@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import useAPI from "../shared/useAPI";
-import { Notification } from "../shared/helpers/notification";
+import { Notification } from "../index";
 import { Button, Classes, Dialog, InputGroup, Intent, Menu, Position, MenuItem, Card } from "@blueprintjs/core";
 import { Popover2 } from "@blueprintjs/popover2";
 
@@ -30,9 +30,12 @@ export default function CreateNewPost() {
   async function onCreate() {
     try {
       const res = await createPost();
-      // @ts-ignore
-      navigate(`/post/edit/${res.data._id}`);
-      window.location.reload();
+      if (res?.data?._id) {
+        navigate(`/post/edit/${res.data._id}`);
+        window.location.reload();
+      } else {
+        throw new Error("New post was created but ID was not received.");
+      }
     } catch (error) {
       console.error("Cannot create new post.", error);
       Notification.show({

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Classes, Dialog, InputGroup, Intent } from "@blueprintjs/core";
 import useAPI from "../shared/useAPI";
-import { Notification } from "../shared/helpers/notification";
+import { Notification } from "../index";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateNewPage() {
@@ -22,9 +22,12 @@ export default function CreateNewPage() {
   async function onCreate() {
     try {
       const res = await createPage();
-      // @ts-ignore
-      navigate(`/page/edit/${res.data._id}`);
-      window.location.reload();
+      if (res?.data?._id) {
+        navigate(`/page/edit/${res.data._id}`);
+        window.location.reload();
+      } else {
+        throw new Error("New page was created but ID was not received.");
+      }
     } catch (error) {
       console.error("Cannot create new page.", error);
       Notification.show({

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Classes, Dialog, InputGroup, Intent } from "@blueprintjs/core";
 import useAPI from "../shared/useAPI";
-import { Notification } from "../shared/helpers/notification";
+import { Notification } from "../index";
 
 type RenameItemInfoProps = {
   oldPath: string;

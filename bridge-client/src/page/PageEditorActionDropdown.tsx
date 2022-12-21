@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useAPI from "../shared/useAPI";
 import { Alert, AnchorButton, Button, ButtonGroup, Card, Intent } from "@blueprintjs/core";
-import { Notification } from "../shared/helpers/notification";
+import { Notification } from "../index";
 import { AxiosRequestConfig } from "axios";
 import { Popover2 } from "@blueprintjs/popover2";
 

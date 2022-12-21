@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import useAPI from "../shared/useAPI";
 import { Button, ButtonGroup, Card, ControlGroup, Divider, InputGroup, Intent, Spinner } from "@blueprintjs/core";
 import PostEditorActionDropdown from "./PostEditorActionDropdown";
-import { Notification } from "../shared/helpers/notification";
+import { Notification } from "../index";
 import { DatePicker } from "@blueprintjs/datetime";
 import FrontMatterEditor from "../shared/components/FrontMatterEditor";
 import { parsePostData, validateRequiredPostMetadataFields } from "../shared/helpers/frontMatterParserHelper";

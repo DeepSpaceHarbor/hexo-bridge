@@ -3,7 +3,7 @@ import { Alert, Button, Intent } from "@blueprintjs/core";
 import { scaffold } from "./types";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../../shared/useAPI";
-import { Notification } from "../../shared/helpers/notification";
+import { Notification } from "../../index";
 
 const deleteScaffoldConfig: AxiosRequestConfig = {
   method: "POST",

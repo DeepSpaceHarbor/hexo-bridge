@@ -5,7 +5,7 @@ import useAPI from "../shared/useAPI";
 import { Button, ButtonGroup, ControlGroup, Divider, InputGroup, Intent, Spinner } from "@blueprintjs/core";
 import { parsePageData, validateRequiredPageMetadataFields } from "../shared/helpers/frontMatterParserHelper";
 import FrontMatterEditor from "../shared/components/FrontMatterEditor";
-import { Notification } from "../shared/helpers/notification";
+import { Notification } from "../index";
 import PageEditorActionDropdown from "./PageEditorActionDropdown";
 import GenericError from "../shared/components/GenericError";
 import AceEditor from "react-ace";

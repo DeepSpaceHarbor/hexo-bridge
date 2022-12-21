@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button, Callout, ControlGroup, Intent, Spinner } from "@blueprintjs/core";
+import { Notification } from "../../index";
 import GenericError from "./GenericError";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../useAPI";
-import { Notification } from "../helpers/notification";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/theme-xcode";
 import "ace-builds/src-noconflict/mode-yaml";
@@ -54,7 +54,7 @@ export default function YamlConfigEditor(props: YamlConfigEditorProps) {
     true
   );
 
-  const [errorMarkers, setErrorMarkers] = useState([]);
+  const [errorMarkers, setErrorMarkers] = useState<Array<{ row: any; column: number; text: any; type: string }>>([]);
   useEffect(() => {
     const validate = async () => {
       const res = await verifyYaml();
@@ -62,8 +62,6 @@ export default function YamlConfigEditor(props: YamlConfigEditorProps) {
       if (res.data.error.length === 0) {
         setErrorMarkers([]);
       } else {
-        // @ts-ignore
-
         setErrorMarkers([
           {
             // @ts-ignore

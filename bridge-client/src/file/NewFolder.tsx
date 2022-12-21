@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import folderIcon from "./icons/folder-small.png";
 import { Button, Classes, Dialog, InputGroup, Intent } from "@blueprintjs/core";
 import useAPI from "../shared/useAPI";
-import { Notification } from "../shared/helpers/notification";
+import { Notification } from "../index";
 
 type NewFolderProps = {
   currentDir: string;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useAPI from "../../shared/useAPI";
-import { Notification } from "../../shared/helpers/notification";
+import { Notification } from "../../index";
 import { Alert, Button, Intent } from "@blueprintjs/core";
 import { useNavigate, useParams } from "react-router-dom";
 

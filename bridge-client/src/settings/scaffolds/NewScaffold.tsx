@@ -4,7 +4,7 @@ import { scaffold } from "./types";
 import { Intent } from "@blueprintjs/core/lib/esm/common/intent";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../../shared/useAPI";
-import { Notification } from "../../shared/helpers/notification";
+import { Notification } from "../../index";
 
 const createScaffoldConfig: AxiosRequestConfig = {
   method: "POST",

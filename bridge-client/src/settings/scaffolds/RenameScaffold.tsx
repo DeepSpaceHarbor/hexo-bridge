@@ -3,7 +3,7 @@ import { Button, Classes, Dialog, InputGroup } from "@blueprintjs/core";
 import { Intent } from "@blueprintjs/core/lib/esm/common/intent";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../../shared/useAPI";
-import { Notification } from "../../shared/helpers/notification";
+import { Notification } from "../../index";
 import { scaffold } from "./types";
 
 type RenameScaffoldProps = {

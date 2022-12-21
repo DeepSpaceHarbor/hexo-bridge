@@ -2,7 +2,7 @@ import React, { SyntheticEvent, useState } from "react";
 import { FileInfo } from "./types/types";
 import { Alert, Button, Card, Divider, Elevation, Icon, Intent } from "@blueprintjs/core";
 import getIconForFile from "./getIconForFile";
-import { Notification } from "../shared/helpers/notification";
+import { Notification } from "../index";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../shared/useAPI";
 import RenameItem from "./RenameItem";

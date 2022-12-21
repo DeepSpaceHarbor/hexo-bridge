@@ -25,6 +25,7 @@ export default function useAPI(
     } catch (err: any) {
       console.error("useAPI error.", err);
       setError(err);
+      throw new Error(err);
     } finally {
       setIsLoading(false);
     }

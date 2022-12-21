@@ -16,11 +16,9 @@ import InstalledThemesPage from "./theme/installed/InstalledThemesPage";
 import DiscoverThemesPage from "./theme/discover/DiscoverThemesPage";
 import ThemeSettingsPage from "./theme/ThemeSettingsPage";
 import FileDirectoryPage from "./file/FileDirectoryPage";
+import { Toaster } from "@blueprintjs/core";
 
-const container = document.getElementById("app");
-if (container === null) throw new Error("Root container missing in index.html");
-const root = createRoot(container);
-
+const root = createRoot(document.getElementById("app")!);
 root.render(
   <BrowserRouter basename={"bridge"}>
     <Routes>
@@ -43,4 +41,13 @@ root.render(
       <Route path={"/file"} element={<FileDirectoryPage />} />
     </Routes>
   </BrowserRouter>
+);
+
+export let Notification: Toaster;
+createRoot(document.getElementById("toaster")!).render(
+  <Toaster
+    ref={(instance) => {
+      Notification = instance!;
+    }}
+  />
 );

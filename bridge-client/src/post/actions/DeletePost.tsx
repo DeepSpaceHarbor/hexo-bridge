@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Alert, Button, Intent } from "@blueprintjs/core";
 import useAPI from "../../shared/useAPI";
-import { Notification } from "../../shared/helpers/notification";
+import { Notification } from "../../index";
 import { useNavigate, useParams } from "react-router-dom";
 
 export default function DeletePost() {

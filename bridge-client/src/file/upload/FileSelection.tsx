@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Classes, Intent, Tag } from "@blueprintjs/core";
 import Dropzone, { FileRejection } from "react-dropzone";
 import dropZoneIllustration from "../ilustrations/file-upload-dropzone.svg";
-import { Notification } from "../../shared/helpers/notification";
+import { Notification } from "../../index";
 
 type FileSelectionProps = {
   currentLocation: string;

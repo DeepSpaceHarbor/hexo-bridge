@@ -4,7 +4,7 @@ import { Alert, Button, Card, Divider, Icon, Intent, Elevation } from "@blueprin
 import folderIcon from "./icons/folder.png";
 import useAPI from "../shared/useAPI";
 import { AxiosRequestConfig } from "axios";
-import { Notification } from "../shared/helpers/notification";
+import { Notification } from "../index";
 import RenameItem from "./RenameItem";
 
 const deleteFolderAPI: AxiosRequestConfig = {

@@ -9,7 +9,7 @@ import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/theme-xcode";
 import "ace-builds/src-noconflict/mode-markdown";
 import "ace-builds/src-min-noconflict/ext-searchbox";
-import { Notification } from "../../shared/helpers/notification";
+import { Notification } from "../../index";
 import RenameScaffold from "./RenameScaffold";
 import DeleteScaffold from "./DeleteScaffold";
 import { scaffold } from "./types";
