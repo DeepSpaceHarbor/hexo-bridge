@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/bridge/static/css/main.e965bab8.css",
-    "main.js": "/bridge/static/js/main.2ac5a193.js",
-    "static/media/blueprint-icons-20.eot?": "/bridge/static/media/blueprint-icons-20.12b358c6d8dbe8756615.eot",
-    "static/media/blueprint-icons-20.ttf?": "/bridge/static/media/blueprint-icons-20.3fd95ab7e829aa1d9ba0.ttf",
-    "static/media/blueprint-icons-16.eot?": "/bridge/static/media/blueprint-icons-16.c98f9776ee5bbd2aa668.eot",
-    "static/media/blueprint-icons-16.ttf?": "/bridge/static/media/blueprint-icons-16.74dbfc60db44217ef15d.ttf",
-    "static/media/blueprint-icons-20.woff?": "/bridge/static/media/blueprint-icons-20.68fac169b07ae937267a.woff",
-    "static/media/blueprint-icons-16.woff?": "/bridge/static/media/blueprint-icons-16.f5fd4d64b81b471c0402.woff",
-    "static/media/blueprint-icons-20.woff2?": "/bridge/static/media/blueprint-icons-20.14aa945151de662f422e.woff2",
-    "static/media/blueprint-icons-16.woff2?": "/bridge/static/media/blueprint-icons-16.a12444a68ba6fe9089da.woff2",
+    "main.css": "/bridge/static/css/main.6769d805.css",
+    "main.js": "/bridge/static/js/main.41bd559a.js",
+    "static/media/blueprint-icons-20.eot?": "/bridge/static/media/blueprint-icons-20.d317d8e9664636080ad2.eot",
+    "static/media/blueprint-icons-20.ttf?": "/bridge/static/media/blueprint-icons-20.c6dea603c58a0bcb5512.ttf",
+    "static/media/blueprint-icons-16.eot?": "/bridge/static/media/blueprint-icons-16.4c64ca9bc9382d8efa79.eot",
+    "static/media/blueprint-icons-16.ttf?": "/bridge/static/media/blueprint-icons-16.f0580acd64437597aef0.ttf",
+    "static/media/blueprint-icons-20.woff?": "/bridge/static/media/blueprint-icons-20.4fa4ec6a6fab211c90e6.woff",
+    "static/media/blueprint-icons-16.woff?": "/bridge/static/media/blueprint-icons-16.3e75e0c04e6091d48f69.woff",
+    "static/media/blueprint-icons-20.woff2?": "/bridge/static/media/blueprint-icons-20.8bee0c372f0cf4399089.woff2",
+    "static/media/blueprint-icons-16.woff2?": "/bridge/static/media/blueprint-icons-16.f81c5e3e118a3659abda.woff2",
+    "index.html": "/bridge/index.html",
     "static/media/controll-panel.png": "/bridge/static/media/controll-panel.f5107ba9bf14faeda939.png",
     "static/media/file-upload-dropzone.svg": "/bridge/static/media/file-upload-dropzone.3e3e175f3e435ea7db907c9adc808b08.svg",
     "static/media/file-excel.svg": "/bridge/static/media/file-excel.be8324ec178b28b6de206787057fcb5e.svg",
@@ -17,13 +18,12 @@
     "static/media/file-image.svg": "/bridge/static/media/file-image.f88a601943feeb8dc4fab29829fe9371.svg",
     "static/media/hexo-logo-avatar.svg": "/bridge/static/media/hexo-logo-avatar.0e6ec9d7e5af7fa4e59bffbfd9a07c11.svg",
     "static/media/file-text.svg": "/bridge/static/media/file-text.91b2a18a9e21f715fe161145898324b0.svg",
-    "index.html": "/bridge/index.html",
     "static/media/file-video.svg": "/bridge/static/media/file-video.f0c0398dd96e9dc9dce6fdf541d07186.svg",
-    "main.e965bab8.css.map": "/bridge/static/css/main.e965bab8.css.map",
-    "main.2ac5a193.js.map": "/bridge/static/js/main.2ac5a193.js.map"
+    "main.6769d805.css.map": "/bridge/static/css/main.6769d805.css.map",
+    "main.41bd559a.js.map": "/bridge/static/js/main.41bd559a.js.map"
   },
   "entrypoints": [
-    "static/css/main.e965bab8.css",
-    "static/js/main.2ac5a193.js"
+    "static/css/main.6769d805.css",
+    "static/js/main.41bd559a.js"
   ]
 }

@@ -1,16 +1,19 @@
 const fs = require("hexo-fs");
 const path = require("path");
 const frontMatterHelper = require("hexo-front-matter");
+const settings = require("./setting");
 
 let hexo = null;
 let Page = null;
 let SOURCE_DIR = null;
+let READ_TIMEOUT = 200;
 
 function setup(hexoInstance) {
   hexo = hexoInstance;
   Page = hexo.model("Page");
-
+  settings.setup(hexo);
   SOURCE_DIR = hexo.source_dir;
+  READ_TIMEOUT = settings.getBridgeConfigAsJson().content_fetch_timeout || 200;
 }
 
 function getAllPages() {
@@ -43,18 +46,31 @@ async function updateContent(id, content) {
   return "Success!";
 }
 
-async function getNewPage(newPath) {
+async function findNewPage(newPath, timeout = READ_TIMEOUT) {
   //TODO: Find a way to do this without setTimeout.
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       resolve((newPage = Page.findOne({ source: newPath.split(SOURCE_DIR)[1] })));
-    }, 200);
+    }, timeout);
   });
+}
+
+async function getNewPage(newPath) {
+  let newPageReturnInfo = await findNewPage(newPath);
+  //Search for the new page one more time. Sometimes it takes couple of ms for hexo to update the database.
+  if (!newPageReturnInfo) {
+    newPageReturnInfo = await findNewPage(newPath, READ_TIMEOUT + 200);
+  }
+  //If page is still not found, throw error.
+  if (!newPageReturnInfo) {
+    throw new Error("Sorry, I cannot find the newly created post.");
+  }
+  return newPageReturnInfo;
 }
 
 async function create(title) {
   const newPageInfo = await hexo.post.create({ title: title, layout: "page" });
-  return getNewPage(newPageInfo.path);
+  return await getNewPage(newPageInfo.path);
 }
 
 async function deletePage(id) {
