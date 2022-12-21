@@ -1,17 +1,20 @@
 const fs = require("hexo-fs");
 const path = require("path");
 const frontMatterHelper = require("hexo-front-matter");
+const settings = require("./setting");
 
 let hexo = null;
 let Post = null;
 let SOURCE_DIR = null;
 let POSTS_DIR = null;
 let DRAFTS_DIR = null;
+let READ_TIMEOUT = 200;
 
 function setup(hexoInstance) {
   hexo = hexoInstance;
   Post = hexo.model("Post");
-
+  settings.setup(hexo);
+  READ_TIMEOUT = settings.getBridgeConfigAsJson().content_fetch_timeout || 200;
   SOURCE_DIR = hexo.source_dir;
   POSTS_DIR = path.join(SOURCE_DIR, "_posts");
   DRAFTS_DIR = path.join(SOURCE_DIR, "_drafts");
@@ -38,13 +41,26 @@ async function getSinglePost(id) {
   }
 }
 
-async function getNewPost(newPath) {
+async function findNewPost(newPath, timeout = READ_TIMEOUT) {
   //TODO: Find a way to do this without setTimeout.
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       resolve((newPost = Post.findOne({ source: newPath.split(SOURCE_DIR)[1] })));
-    }, 3000);
+    }, timeout);
   });
+}
+
+async function getNewPost(newPath) {
+  let newPostReturnInfo = await findNewPost(newPath);
+  //Search for the new post one more time. Sometimes it takes couple of ms for hexo to update the database.
+  if (!newPostReturnInfo) {
+    newPostReturnInfo = await findNewPost(newPath, READ_TIMEOUT + 200);
+  }
+  //If post is still not found, throw error.
+  if (!newPostReturnInfo) {
+    throw new Error("Sorry, I cannot find the newly created post.");
+  }
+  return newPostReturnInfo;
 }
 
 async function unpublish(id) {
