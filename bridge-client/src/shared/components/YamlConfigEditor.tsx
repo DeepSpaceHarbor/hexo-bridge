@@ -4,7 +4,7 @@ import { Notification } from "../../index";
 import GenericError from "./GenericError";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../useAPI";
-import AceEditor from "react-ace";
+import AceEditor, { IAnnotation } from "react-ace";
 import "ace-builds/src-noconflict/theme-xcode";
 import "ace-builds/src-noconflict/mode-yaml";
 import "ace-builds/src-min-noconflict/ext-searchbox";
@@ -54,7 +54,7 @@ export default function YamlConfigEditor(props: YamlConfigEditorProps) {
     true
   );
 
-  const [errorMarkers, setErrorMarkers] = useState<Array<{ row: any; column: number; text: any; type: string }>>([]);
+  const [errorMarkers, setErrorMarkers] = useState<Array<IAnnotation>>([]);
   useEffect(() => {
     const validate = async () => {
       const res = await verifyYaml();

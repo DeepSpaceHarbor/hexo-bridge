@@ -1,11 +1,7 @@
-import AceEditor, { IAnnotation } from "react-ace";
-import "ace-builds/src-noconflict/theme-xcode";
-import "ace-builds/src-noconflict/mode-yaml";
-import "ace-builds/src-min-noconflict/ext-searchbox";
+import React, { useLayoutEffect, useState } from "react";
 import { Alert, Dialog, Intent } from "@blueprintjs/core";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import Editor from "@monaco-editor/react";
 import useAPI from "../useAPI";
-
 const frontMatterHelper = require("hexo-front-matter");
 
 type FrontMatterEditorProps = {
@@ -15,54 +11,50 @@ type FrontMatterEditorProps = {
 };
 
 export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatterEditorProps) {
-  const [metaData, setMetadata] = useState("");
-  const [errorMarkers, setErrorMarkers] = useState<IAnnotation[]>([]);
+  const [metaData, setMetaData] = useState("");
   const [canBeClosed, setCanBeClosed] = useState(true);
-  useLayoutEffect(() => {
-    setMetadata(value);
-  }, [value]);
 
-  useEffect(() => {
-    validateFrontMatter();
-    //eslint-disable-next-line
-  }, [metaData]);
+  useLayoutEffect(() => {
+    setMetaData(value);
+  }, [value]);
 
   const { data: userPrefs } = useAPI({
     method: "GET",
     url: "settings/bridge/getAsJson",
   });
 
-  function validateFrontMatter(): boolean {
+  function getErrorMarkers(content: string) {
     try {
-      frontMatterHelper.parse(metaData);
-      if (!metaData.trim().endsWith("---")) {
-        setErrorMarkers([
+      frontMatterHelper.parse(content);
+      if (!content.trim().endsWith("---")) {
+        return [
           {
-            row: metaData.split("\n").length - 1,
-            column: 0,
-            text: "Front matter must end with ---",
-            type: "error",
+            startLineNumber: content.split("\n").length - 1,
+            endLineNumber: content.split("\n").length - 1,
+            startColumn: 0,
+            endColumn: 0,
+            message: "Front matter must end with ---",
+            severity: 8,
           },
-        ]);
-        return false;
+        ];
       }
-      setErrorMarkers([]);
-      return true;
+      return [];
     } catch (error: any) {
-      setErrorMarkers([
+      return [
         {
-          row: error.mark.line,
-          column: 0,
-          text: error.message,
-          type: "error",
+          startLineNumber: error.mark.line + 1,
+          endLineNumber: error.mark.line + 1,
+          startColumn: error.mark.column + 1,
+          endColumn: error.mark.column + 1,
+          message: error.message,
+          severity: 8,
         },
-      ]);
-      return false;
+      ];
     }
   }
 
   function onCloseEditor() {
-    const isMetadataValid = validateFrontMatter();
+    const isMetadataValid = getErrorMarkers(metaData).length === 0;
     if (isMetadataValid) {
       setCanBeClosed(true);
       onClose(metaData);
@@ -72,49 +64,52 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
   }
 
   return (
-    <>
-      <Dialog
-        icon="annotation"
-        title="Front matter editor"
-        isOpen={isOpen}
-        canOutsideClickClose={false}
-        onClose={onCloseEditor}
-        style={{ width: "40vw" }}
+    <Dialog
+      icon="annotation"
+      title="Front matter editor"
+      isOpen={isOpen}
+      canOutsideClickClose={false}
+      onClose={onCloseEditor}
+      style={{ width: "50vw" }}
+    >
+      <Editor
+        width={"fit-parent"}
+        height={"50vh"}
+        language="yaml"
+        defaultValue={metaData}
+        options={{
+          theme: "Xcode_default",
+          minimap: { enabled: false },
+          contextmenu: false,
+          fontSize: userPrefs.editorFontSize || 14,
+        }}
+        onMount={function handleEditorDidMount(editor, monaco) {
+          editor.onDidChangeModelContent((e) => {
+            const newContent = editor.getValue();
+            setMetaData(newContent);
+            const errorMarkers = getErrorMarkers(newContent);
+            monaco.editor.setModelMarkers(editor.getModel()!, "Bridge", [...errorMarkers]);
+          });
+        }}
+      />
+      <Alert
+        isOpen={!canBeClosed}
+        intent={Intent.PRIMARY}
+        icon="error"
+        confirmButtonText="Go back"
+        cancelButtonText="Discard changes"
+        onCancel={() => {
+          setMetaData(value);
+          setCanBeClosed(true);
+          onClose(value);
+        }}
+        onConfirm={() => setCanBeClosed(true)}
       >
-        <AceEditor
-          height="50vh"
-          width="fit-parent"
-          style={{ marginBottom: "-12px" }}
-          mode="yaml"
-          theme="xcode"
-          annotations={errorMarkers}
-          onChange={(newContent: string) => {
-            setMetadata(newContent.trim());
-          }}
-          value={metaData}
-          fontSize={userPrefs.editorFontSize || 14}
-          showPrintMargin={false}
-          editorProps={{ $blockScrolling: true }}
-        />
-        <Alert
-          isOpen={!canBeClosed}
-          intent={Intent.PRIMARY}
-          icon="error"
-          confirmButtonText="Go back"
-          cancelButtonText="Discard changes"
-          onCancel={() => {
-            setMetadata(value);
-            setCanBeClosed(true);
-            onClose(value);
-          }}
-          onConfirm={() => setCanBeClosed(true)}
-        >
-          <p>
-            <b>Front matter contains errors.</b>
-          </p>
-          <p>You can go back and correct these errors, or discard the changes.</p>
-        </Alert>
-      </Dialog>{" "}
-    </>
+        <p>
+          <b>Front matter contains errors.</b>
+        </p>
+        <p>You can go back and correct these errors, or discard the changes.</p>
+      </Alert>
+    </Dialog>
   );
 }
