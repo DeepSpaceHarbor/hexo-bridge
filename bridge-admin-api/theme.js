@@ -16,8 +16,7 @@ async function setup(hexoInstance) {
     //Download official theme list
     const res = await axios({
       method: "GET",
-      url:
-        "https://raw.githubusercontent.com/hexojs/site/master/source/_data/themes.yml",
+      url: "https://raw.githubusercontent.com/hexojs/site/master/source/_data/themes.yml",
     });
     const allThemes = yaml.load(res.data);
     //Sort by tags
@@ -60,7 +59,7 @@ async function setup(hexoInstance) {
     });
     fs.writeFile(ALL_THEMES_LIST_PATH, JSON.stringify(byTags));
   } catch (error) {
-    console.error("Got error while fetching themes list.", error);
+    //Do nothing, use the local file.
   }
 }
 
@@ -94,9 +93,7 @@ function getInstalled() {
   const files = fs.readdirSync(dir, { withFileTypes: true });
   files.forEach((file) => {
     if (file.isDirectory()) {
-      const themeInfo = allThemes.all.themes.find(
-        (item) => item.name.toLowerCase() === file.name.toLowerCase()
-      );
+      const themeInfo = allThemes.all.themes.find((item) => item.name.toLowerCase() === file.name.toLowerCase());
       installed.push({
         ...themeInfo,
         name: file.name,
@@ -107,9 +104,7 @@ function getInstalled() {
   const packageJson = require(path.join(hexo.base_dir, "package.json"));
   for (let module in packageJson.dependencies) {
     if (module.startsWith("hexo-theme")) {
-      let moduleInfo = allThemes.all.themes.find(
-        (item) => item.name === module.substring(11)
-      );
+      let moduleInfo = allThemes.all.themes.find((item) => item.name === module.substring(11));
       if (!moduleInfo) {
         moduleInfo = {};
       }
