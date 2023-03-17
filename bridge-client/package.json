@@ -8,7 +8,7 @@
     "@blueprintjs/datetime": "^4.4.8",
     "@blueprintjs/popover2": "^1.10.2",
     "@blueprintjs/select": "^4.8.12",
-    "@monaco-editor/react": "^4.4.6",
+    "@uiw/react-textarea-code-editor": "^2.1.1",
     "ace-builds": "1.14.0",
     "axios": "^1.2.1",
     "hexo-front-matter": "^4.0.0",
