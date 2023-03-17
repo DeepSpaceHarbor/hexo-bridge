@@ -12,8 +12,7 @@ async function setup(hexoInstance) {
     //Download official plugin list
     const res = await axios({
       method: "GET",
-      url:
-        "https://raw.githubusercontent.com/hexojs/site/master/source/_data/plugins.yml",
+      url: "https://raw.githubusercontent.com/hexojs/site/master/source/_data/plugins.yml",
     });
     const allPlugins = yaml.load(res.data);
     //Sort by tags
@@ -40,7 +39,7 @@ async function setup(hexoInstance) {
     });
     fs.writeFile(ALL_PLUGINS_LIST_PATH, JSON.stringify(byTags));
   } catch (error) {
-    console.error("Got error while fetching plugins list.", error);
+    //Do nothing, use the local file.
   }
 }
 
@@ -56,9 +55,7 @@ function getInstalled() {
   //https://github.com/hexojs/hexo/issues/3890
   for (let module in packageJson.dependencies) {
     if (module.startsWith("hexo-") && !module.startsWith("hexo-theme")) {
-      let moduleInfo = allPlugins.all.plugins.find(
-        (item) => item.name === module
-      );
+      let moduleInfo = allPlugins.all.plugins.find((item) => item.name === module);
       if (!moduleInfo) {
         moduleInfo = {};
       }
