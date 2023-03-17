@@ -1,31 +1,26 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Grid from "../../shared/components/Grid";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
 import DiscoverThemeCard from "./DiscoverThemeCard";
 import { NonIdealState } from "@blueprintjs/core";
 import type { Theme } from "../types/types";
+import Lightbox from "yet-another-react-lightbox";
+import Captions from "yet-another-react-lightbox/plugins/captions";
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/captions.css";
 
 export default function DiscoverThemesGrid({ themes }: { themes: Theme[] }) {
   const [showLightbox, setShowLightbox] = useState(false);
-  const [lightboxSrc, setLightboxSrc] = useState("");
-  const [lightboxTitle, setLightboxTitle] = useState("");
-  const [lightboxCaption, setLightboxCaption] = useState("");
-
-  function getLightbox() {
-    if (showLightbox) {
-      return (
-        <Lightbox
-          mainSrc={lightboxSrc}
-          onCloseRequest={() => {
-            setShowLightbox(false);
-          }}
-          imageTitle={lightboxTitle}
-          imageCaption={lightboxCaption}
-        />
-      );
-    }
-  }
+  const [lightBoxIndex, setLightBoxIndex] = useState(0);
+  const themesSlides = useMemo(() => {
+    return themes.map((theme: Theme) => {
+      return {
+        src: theme.screenshot,
+        title: theme.name,
+        alt: theme.name,
+        description: theme.description,
+      };
+    });
+  }, [themes]);
 
   function getState() {
     if (themes.length === 0) {
@@ -33,21 +28,30 @@ export default function DiscoverThemesGrid({ themes }: { themes: Theme[] }) {
     }
     return (
       <>
+        <Lightbox
+          open={showLightbox}
+          close={() => setShowLightbox(false)}
+          plugins={[Captions]}
+          carousel={{
+            finite: true,
+          }}
+          index={lightBoxIndex}
+          slides={themesSlides}
+        />
         <Grid columns={2}>
-          {themes.map((theme: Theme) => {
+          {themes.map((theme: Theme, index) => {
             return (
               <DiscoverThemeCard
                 theme={theme}
                 key={`${theme.name}|${theme.link}`}
-                setLightboxSrc={setLightboxSrc}
-                setLightboxTitle={setLightboxTitle}
-                setLightboxCaption={setLightboxCaption}
-                setShowLightbox={setShowLightbox}
+                showLightbox={() => {
+                  setShowLightbox(true);
+                  setLightBoxIndex(index);
+                }}
               />
             );
           })}
         </Grid>
-        {getLightbox()}
       </>
     );
   }

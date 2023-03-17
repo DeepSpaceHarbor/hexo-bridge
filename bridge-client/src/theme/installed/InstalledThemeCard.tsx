@@ -4,19 +4,10 @@ import { InstalledTheme } from "../types/types";
 
 export type InstalledThemeCardProps = {
   theme: InstalledTheme;
-  setLightboxSrc: (src: string) => void;
-  setLightboxTitle: any; //TODO: find a way to implement better type for this.
-  setLightboxCaption: any; //TODO: find a way to implement better type for this.
-  setShowLightbox: (showLightbox: boolean) => void;
+  showLightbox: () => void;
 };
 
-export default function InstalledThemeCard({
-  theme,
-  setLightboxSrc,
-  setLightboxTitle,
-  setLightboxCaption,
-  setShowLightbox,
-}: InstalledThemeCardProps) {
+export default function InstalledThemeCard({ theme, showLightbox }: InstalledThemeCardProps) {
   return (
     <Card className="margin" key={`${theme.name}|${theme.link}`}>
       <h2>
@@ -31,10 +22,7 @@ export default function InstalledThemeCard({
         <div
           style={{ cursor: "pointer" }}
           onClick={() => {
-            setLightboxSrc(theme.screenshot);
-            setLightboxTitle(<b>{theme.name}</b>);
-            setLightboxCaption(<b>{theme.description}</b>);
-            setShowLightbox(true);
+            showLightbox();
           }}
         >
           <img src={theme.screenshot} alt={theme.name} style={{ maxWidth: "30vw" }} />
