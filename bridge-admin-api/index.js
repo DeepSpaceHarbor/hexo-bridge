@@ -1,8 +1,9 @@
 const bodyParser = require("body-parser");
 const toJson = require("./utils.js").toJson;
+const toJsonFromHexo = require("./utils.js").toJsonFromHexo;
 const serveClientFiles = require("./utils.js").serveClientFiles;
 const path = require("path");
-var serveStatic = require("serve-static");
+const serveStatic = require("serve-static");
 
 const posts = require("./post.js");
 const pages = require("./page.js");
@@ -13,6 +14,9 @@ const plugins = require("./plugin.js");
 const themes = require("./theme.js");
 
 function setupHelpers(req, res, next) {
+  res.sendHexoData = (data) => {
+    res.end(toJsonFromHexo(data));
+  };
   res.sendSuccess = (data) => {
     res.end(toJson(data));
   };
@@ -45,13 +49,13 @@ hexo.extend.filter.register("server_middleware", (app) => {
 
   //API:POSTS
   app.use(hexo.config.root + "api/posts/getAll", function (req, res) {
-    res.sendSuccess(posts.getAll());
+    res.sendHexoData(posts.getAll());
   });
 
   app.use(hexo.config.root + "api/posts/getSingle", async function (req, res) {
     try {
       const post = await posts.getSingle(req.body.id);
-      res.sendSuccess(post);
+      res.sendHexoData(post);
     } catch (error) {
       console.error(error);
       res.sendError("Sorry, something went wrong.");
@@ -61,7 +65,7 @@ hexo.extend.filter.register("server_middleware", (app) => {
   app.use(hexo.config.root + "api/posts/draft", async function (req, res) {
     try {
       const post = await posts.unpublish(req.body.id);
-      res.sendSuccess(post);
+      res.sendHexoData(post);
     } catch (error) {
       console.error(error);
       res.sendError("Sorry, something went wrong.");
@@ -71,7 +75,7 @@ hexo.extend.filter.register("server_middleware", (app) => {
   app.use(hexo.config.root + "api/posts/publish", async function (req, res) {
     try {
       const post = await posts.publish(req.body.id);
-      res.sendSuccess(post);
+      res.sendHexoData(post);
     } catch (error) {
       console.error(error);
       res.sendError("Sorry, something went wrong.");
@@ -81,7 +85,7 @@ hexo.extend.filter.register("server_middleware", (app) => {
   app.use(hexo.config.root + "api/posts/save", async function (req, res) {
     try {
       const result = await posts.save(req.body.id, req.body.content);
-      res.sendSuccess(result);
+      res.sendHexoData(result);
     } catch (error) {
       console.error(error);
       res.sendError("Sorry, something went wrong.");
@@ -101,7 +105,7 @@ hexo.extend.filter.register("server_middleware", (app) => {
   app.use(hexo.config.root + "api/posts/create", async function (req, res) {
     try {
       const post = await posts.create(req.body.title, req.body.scaffold);
-      res.sendSuccess(post);
+      res.sendHexoData(post);
     } catch (error) {
       console.error(error);
       res.sendError("Sorry, something went wrong.");
@@ -172,13 +176,13 @@ hexo.extend.filter.register("server_middleware", (app) => {
 
   //API:PAGES
   app.use(hexo.config.root + "api/pages/getAll", function (req, res) {
-    res.sendSuccess(pages.getAll());
+    res.sendHexoData(pages.getAll());
   });
 
   app.use(hexo.config.root + "api/pages/getSingle", async function (req, res) {
     try {
       const page = await pages.getSingle(req.body.id);
-      res.sendSuccess(page);
+      res.sendHexoData(page);
     } catch (error) {
       console.error(error);
       res.sendError("Sorry, something went wrong.");
@@ -188,7 +192,7 @@ hexo.extend.filter.register("server_middleware", (app) => {
   app.use(hexo.config.root + "api/pages/save", async function (req, res) {
     try {
       const result = await pages.save(req.body.id, req.body.content);
-      res.sendSuccess(result);
+      res.sendHexoData(result);
     } catch (error) {
       console.error(error);
       res.sendError("Sorry, something went wrong.");
@@ -208,7 +212,7 @@ hexo.extend.filter.register("server_middleware", (app) => {
   app.use(hexo.config.root + "api/pages/create", async function (req, res) {
     try {
       const page = await pages.create(req.body.title);
-      res.sendSuccess(page);
+      res.sendHexoData(page);
     } catch (error) {
       console.error(error);
       res.sendError("Sorry, something went wrong.");
