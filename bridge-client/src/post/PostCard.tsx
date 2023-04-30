@@ -1,7 +1,7 @@
 import React from "react";
 import { Elevation, MenuItem, Button, Card, Divider, Menu } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
-import type { Category, Post, Tag } from "./types/types";
+import type { Post } from "./types/types";
 import { Popover2 } from "@blueprintjs/popover2";
 
 type PostCardProps = {
@@ -30,8 +30,8 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
             }}
           >
             <Menu>
-              {post.categories.data.map((category: Category) => {
-                return <MenuItem key={category.name} text={category.name} />;
+              {post.categories.map((category: string) => {
+                return <MenuItem key={category} text={category} />;
               })}
             </Menu>
           </Card>
@@ -47,7 +47,7 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
       return undefined;
     }
     if (post.tags.length === 0) {
-      return <Button minimal text={`Tags (${post.tags.length})`} className="force-text-muted" />;
+      return <Button minimal text={`Tags (0)`} className="force-text-muted" />;
     }
     return (
       <Popover2
@@ -59,8 +59,8 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
             }}
           >
             <Menu>
-              {post.tags.data.map((tag: Tag) => {
-                return <MenuItem key={tag.name} text={tag.name} />;
+              {post.tags.map((tag: string) => {
+                return <MenuItem key={tag} text={tag} />;
               })}
             </Menu>
           </Card>

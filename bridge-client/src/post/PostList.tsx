@@ -16,14 +16,8 @@ const undefinedPost = {
   date: "",
   published: false,
   content: "",
-  categories: {
-    data: [],
-    length: 0,
-  },
-  tags: {
-    data: [],
-    length: 0,
-  },
+  categories: [],
+  tags: [],
 };
 
 export default function PostList({ posts, showCategories, showTags }: PostListProps) {
