@@ -7,3 +7,4 @@ bridge-admin-api/www/
 bridge-admin-api/node_modules/
 bridge-admin-api/.idea/
 dev-blog/
+dev-tools/node_modules/

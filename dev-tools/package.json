@@ -1,0 +1,10 @@
+{
+  "name": "dev-tools",
+  "version": "1.0.0",
+  "main": "watch.ts",
+  "license": "MIT",
+  "dependencies": {
+    "chokidar": "^3.5.3",
+    "fs-extra": "^11.1.1"
+  }
+}
