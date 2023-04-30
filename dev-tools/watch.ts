@@ -11,13 +11,19 @@ adminApiWatcher.on("all", (event, path) => {
 });
 
 //Web Client
-const bridgeClientDevLocation = "../bridge-client/build/";
+const bridgeClientDevLocation = "../bridge-client/";
 const bridgeClientLocation = bridgeLocation + "www/";
-let clientApiWatcher = chokidar.watch(bridgeClientDevLocation, { ignoreInitial: true, persistent: true });
+let clientApiWatcher = chokidar.watch(bridgeClientDevLocation, {
+  ignoreInitial: true,
+  persistent: true,
+  ignored: /src\/.*|(node_modules\/.*)/,
+});
+
 clientApiWatcher.on("all", (event, path) => {
-  console.log(event, path);
-  fs.emptyDirSync(bridgeClientLocation);
-  fs.moveSync(path, path.replace(bridgeClientDevLocation, bridgeClientLocation));
+  if (path.includes("/build") && (event === "add" || event === "addDir" || event === "change")) {
+    console.log(event, path);
+    fs.copySync(path, path.replace(bridgeClientDevLocation + "build/", bridgeClientLocation));
+  }
 });
 
 console.log("Watching for changes...");
