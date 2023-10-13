@@ -1,11 +1,10 @@
 import { useParams } from "react-router-dom";
 import useAPI from "../shared/useAPI";
-import { AnchorButton, Button, ButtonGroup, Card } from "@blueprintjs/core";
+import { AnchorButton, Button, ButtonGroup, Card, Popover } from "@blueprintjs/core";
 import React from "react";
 import DeletePost from "./actions/DeletePost";
 import PublishPost from "./actions/PublishPost";
 import UnpublishPost from "./actions/UnpublishPost";
-import { Popover2 } from "@blueprintjs/popover2";
 
 export default function PostEditorActionDropdown({ savePost }: { savePost: () => void }) {
   let { id } = useParams();
@@ -25,7 +24,7 @@ export default function PostEditorActionDropdown({ savePost }: { savePost: () =>
       ) : (
         <PublishPost savePost={savePost} />
       )}
-      <Popover2
+      <Popover
         position={"bottom"}
         content={
           <Card
@@ -41,7 +40,7 @@ export default function PostEditorActionDropdown({ savePost }: { savePost: () =>
         }
       >
         <Button icon="caret-down" />
-      </Popover2>
+      </Popover>
     </>
   );
 }

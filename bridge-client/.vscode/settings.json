@@ -3,6 +3,7 @@
         "amet",
         "blueprintjs",
         "frontmatter",
-        "mbox"
+        "mbox",
+        "noconflict"
     ]
 }

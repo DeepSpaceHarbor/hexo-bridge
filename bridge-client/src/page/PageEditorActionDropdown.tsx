@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useAPI from "../shared/useAPI";
-import { Alert, AnchorButton, Button, ButtonGroup, Card, Intent } from "@blueprintjs/core";
+import { Alert, AnchorButton, Button, ButtonGroup, Card, Intent, Popover } from "@blueprintjs/core";
 import { Notification } from "../index";
 import { AxiosRequestConfig } from "axios";
-import { Popover2 } from "@blueprintjs/popover2";
 
 //API Config
 const getSinglePageAPI: AxiosRequestConfig = {
@@ -59,7 +58,7 @@ export default function PageEditorActionDropdown({ savePage }: { savePage: () =>
     return (
       <>
         <AnchorButton icon="share" text="Preview" href={`/${page.path}`} target="_blank" rel="noopener noreferrer" />
-        <Popover2
+        <Popover
           position="bottom"
           content={
             <Card
@@ -80,7 +79,7 @@ export default function PageEditorActionDropdown({ savePage }: { savePage: () =>
           }
         >
           <Button icon="caret-down" onClick={() => setIsDropdownOpen(!isDropdownOpen)} />
-        </Popover2>
+        </Popover>
         <Alert
           isOpen={showDeleteAlert}
           icon="trash"

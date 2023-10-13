@@ -11,9 +11,6 @@ dependencies:
   '@blueprintjs/datetime2':
     specifier: ^2.2.0
     version: 2.2.0(@types/react@18.2.28)(react-dom@18.2.0)(react@18.2.0)
-  '@blueprintjs/popover2':
-    specifier: ^2.0.15
-    version: 2.0.15(@types/react@18.2.28)(react-dom@18.2.0)(react@18.2.0)
   '@blueprintjs/select':
     specifier: ^5.0.15
     version: 5.0.15(@types/react@18.2.28)(react-dom@18.2.0)(react@18.2.0)
@@ -413,24 +410,6 @@ packages:
     dependencies:
       '@types/react': 18.2.28
       change-case: 4.1.2
-      classnames: 2.3.2
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      tslib: 2.5.3
-    dev: false
-
-  /@blueprintjs/popover2@2.0.15(@types/react@18.2.28)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-lXey0Dw/vUcQtj1CUDILqQiTx4OC6W+hA1qAzA3tW7MjYIBuhmlpPVgAvs9rIQVYzr0RJLQqp0SM19NZrbzj4A==}
-    peerDependencies:
-      '@types/react': ^16.14.32 || 17 || 18
-      react: ^16.8 || 17 || 18
-      react-dom: ^16.8 || 17 || 18
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-    dependencies:
-      '@blueprintjs/core': 5.5.0(@types/react@18.2.28)(react-dom@18.2.0)(react@18.2.0)
-      '@types/react': 18.2.28
       classnames: 2.3.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)

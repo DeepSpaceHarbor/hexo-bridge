@@ -2,8 +2,18 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import useAPI from "../shared/useAPI";
 import { Notification } from "../index";
-import { Button, Classes, Dialog, InputGroup, Intent, Menu, Position, MenuItem, Card } from "@blueprintjs/core";
-import { Popover2 } from "@blueprintjs/popover2";
+import {
+  Button,
+  Classes,
+  Dialog,
+  InputGroup,
+  Intent,
+  Menu,
+  Position,
+  MenuItem,
+  Card,
+  Popover,
+} from "@blueprintjs/core";
 
 export default function CreateNewPost() {
   let navigate = useNavigate();
@@ -103,14 +113,14 @@ export default function CreateNewPost() {
             }}
           />
 
-          <Popover2 content={getScaffoldMenuItems()} position={Position.BOTTOM}>
+          <Popover content={getScaffoldMenuItems()} position={Position.BOTTOM}>
             <Button
               outlined
               text={`Use scaffold: ${selectedScaffold}`}
               icon="applications"
               style={{ backgroundColor: "white" }}
             />
-          </Popover2>
+          </Popover>
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <span className={Classes.DIALOG_FOOTER_ACTIONS}>

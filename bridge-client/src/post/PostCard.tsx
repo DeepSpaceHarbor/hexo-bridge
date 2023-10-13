@@ -1,8 +1,7 @@
 import React from "react";
-import { Elevation, MenuItem, Button, Card, Divider, Menu } from "@blueprintjs/core";
+import { Elevation, MenuItem, Button, Card, Divider, Menu, Popover } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import type { Post } from "./types/types";
-import { Popover2 } from "@blueprintjs/popover2";
 
 type PostCardProps = {
   post: Post;
@@ -21,7 +20,7 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
       return <Button minimal text={`Categories (${post.categories.length})`} className="force-text-muted" />;
     }
     return (
-      <Popover2
+      <Popover
         position="right"
         content={
           <Card
@@ -38,7 +37,7 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
         }
       >
         <Button minimal text={`Categories (${post.categories.length})`} className="force-text-muted" />
-      </Popover2>
+      </Popover>
     );
   }
 
@@ -50,7 +49,7 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
       return <Button minimal text={`Tags (0)`} className="force-text-muted" />;
     }
     return (
-      <Popover2
+      <Popover
         position="right"
         content={
           <Card
@@ -67,7 +66,7 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
         }
       >
         <Button minimal text={`Tags (${post.tags.length})`} className="force-text-muted" />
-      </Popover2>
+      </Popover>
     );
   }
 

@@ -3,7 +3,7 @@ import Navigation from "../../shared/components/Navigation";
 import NavigationSettings from "../NavigationSettings";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../../shared/useAPI";
-import { Button, ButtonGroup, Card, ControlGroup, Intent, Menu, MenuItem, Spinner } from "@blueprintjs/core";
+import { Button, ButtonGroup, Card, ControlGroup, Intent, Menu, MenuItem, Spinner, Popover } from "@blueprintjs/core";
 import GenericError from "../../shared/components/GenericError";
 import AceEditor from "react-ace";
 import "ace-builds/src-noconflict/theme-xcode";
@@ -14,7 +14,6 @@ import RenameScaffold from "./RenameScaffold";
 import DeleteScaffold from "./DeleteScaffold";
 import { scaffold } from "./types";
 import NewScaffold from "./NewScaffold";
-import { Popover2 } from "@blueprintjs/popover2";
 
 // API Config
 const getAllScaffolds: AxiosRequestConfig = {
@@ -25,13 +24,13 @@ const saveScaffoldConfig: AxiosRequestConfig = {
   method: "POST",
   url: "scaffolds/save",
 };
-const getUserPrefs: AxiosRequestConfig = {
+const getUserPreferences: AxiosRequestConfig = {
   method: "GET",
   url: "settings/bridge/getAsJson",
 };
 
 export default function ScaffoldsPage() {
-  const { data: userPrefs } = useAPI(getUserPrefs);
+  const { data: userPreferences } = useAPI(getUserPreferences);
   const [hasNewChanges, setHasNewChanges] = useState(false);
   const { loading: isLoading, error, data: allScaffolds } = useAPI(getAllScaffolds);
   const [selectedScaffold, setSelectedScaffold] = useState<scaffold>({
@@ -89,7 +88,7 @@ export default function ScaffoldsPage() {
         <ControlGroup style={{ margin: "5px" }}>
           <NewScaffold allScaffolds={allScaffolds} />
 
-          <Popover2
+          <Popover
             position={"bottom"}
             content={
               <Card
@@ -119,10 +118,10 @@ export default function ScaffoldsPage() {
               </Button>
               <Button icon="caret-down" minimal />
             </ButtonGroup>
-          </Popover2>
+          </Popover>
           <span style={{ flexGrow: 1 }} />
           <Button icon={"floppy-disk"} minimal text={"Save"} onClick={onSave} disabled={!hasNewChanges} />
-          <Popover2
+          <Popover
             position={"bottom"}
             content={
               <Card
@@ -138,7 +137,7 @@ export default function ScaffoldsPage() {
             }
           >
             <Button icon="caret-down" minimal />
-          </Popover2>
+          </Popover>
         </ControlGroup>
         <AceEditor
           height="80vh"
@@ -154,7 +153,7 @@ export default function ScaffoldsPage() {
             setHasNewChanges(true);
           }}
           value={selectedScaffold.content}
-          fontSize={userPrefs.editorFontSize || 14}
+          fontSize={userPreferences.editorFontSize || 14}
           showPrintMargin={false}
           editorProps={{ $blockScrolling: true }}
         />
