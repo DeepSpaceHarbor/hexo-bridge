@@ -2,20 +2,25 @@ import React, { useLayoutEffect, useState } from "react";
 import Navigation from "../shared/components/Navigation";
 import { useParams } from "react-router-dom";
 import useAPI from "../shared/useAPI";
-import { Button, ButtonGroup, Card, ControlGroup, Divider, InputGroup, Intent, Spinner } from "@blueprintjs/core";
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  ControlGroup,
+  Divider,
+  InputGroup,
+  Intent,
+  Spinner,
+  Popover,
+} from "@blueprintjs/core";
 import PostEditorActionDropdown from "./PostEditorActionDropdown";
 import { Notification } from "../index";
 import { DatePicker3 } from "@blueprintjs/datetime2";
 import FrontMatterEditor from "../shared/components/FrontMatterEditor";
 import { parsePostData, validateRequiredPostMetadataFields } from "../shared/helpers/frontMatterParserHelper";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/theme-xcode";
-import "ace-builds/src-noconflict/mode-markdown";
-import "ace-builds/src-min-noconflict/ext-searchbox";
 import GenericError from "../shared/components/GenericError";
-import axios, { AxiosRequestConfig } from "axios";
-import { Popover2 } from "@blueprintjs/popover2";
-import { stringify } from "qs";
+import { AxiosRequestConfig } from "axios";
+import CodeEditor from "@uiw/react-textarea-code-editor";
 import * as frontMatterHelper from "hexo-front-matter";
 
 //API Config
@@ -29,19 +34,14 @@ const savePostAPI: AxiosRequestConfig = {
   url: "posts/save",
 };
 
-const updatePostContentAPI: AxiosRequestConfig = {
-  method: "POST",
-  url: "posts/updateContent",
-};
-
-const getUserPrefsAPI: AxiosRequestConfig = {
+const getUserPreferencesAPI: AxiosRequestConfig = {
   method: "GET",
   url: "settings/bridge/getAsJson",
 };
 
 export default function PostEditorPage() {
   const { id } = useParams();
-  const { data: userPrefs } = useAPI(getUserPrefsAPI);
+  const { data: userPreferences } = useAPI(getUserPreferencesAPI);
   //Get post from api, setup code editor, preview & parse front matter for metadata.
   const {
     loading: isLoading,
@@ -133,7 +133,7 @@ export default function PostEditorPage() {
             >
               Tags ({metadata.tags.length})
             </Button>
-            <Popover2
+            <Popover
               autoFocus={false}
               content={
                 <Card
@@ -160,7 +160,7 @@ export default function PostEditorPage() {
                   year: "numeric",
                 })}
               </Button>
-            </Popover2>
+            </Popover>
             <Divider />
             <Button
               icon="annotation"
@@ -187,60 +187,26 @@ export default function PostEditorPage() {
           </ButtonGroup>
         </ControlGroup>
         <div className="code-editor-preview-container">
-          <AceEditor
-            height="90vh"
-            width="100vw"
-            mode="markdown"
-            theme="xcode"
-            wrapEnabled={true}
+          <CodeEditor
             value={content}
-            onLoad={(editor) => {
-              editor.getSession().setValue(content);
-            }}
-            onChange={(newContent: string) => {
-              setContent(newContent);
+            language="markdown"
+            placeholder="Lorem ipsum dolor sit amet..."
+            onChange={(evn) => {
+              setContent(evn.target.value.trim());
               setHasUnsavedChanges(true);
             }}
-            fontSize={userPrefs.editorFontSize || 14}
-            showPrintMargin={false}
-            editorProps={{ $blockScrolling: true }}
-            setOptions={{ useWorker: false }}
-            commands={[
-              {
-                // commands is array of key bindings.
-                name: "SavePost",
-                bindKey: { win: "Ctrl-S", mac: "Ctrl-S" },
-                exec: async (editor) => {
-                  let requestConfig: AxiosRequestConfig = {
-                    ...updatePostContentAPI,
-                    data: {
-                      id: id,
-                      content: editor.getSession().getValue(),
-                    },
-                  };
-                  requestConfig.baseURL = import.meta.env.VITE_API;
-                  //Why urlencoded instead of json?
-                  //https://github.com/axios/axios/issues/1610#issuecomment-492564113
-                  requestConfig.data = stringify(requestConfig.data);
-                  try {
-                    await axios(requestConfig);
-                    Notification.show({
-                      message: "Content updated!",
-                      intent: Intent.SUCCESS,
-                      icon: "saved",
-                      timeout: 800,
-                    });
-                  } catch (err) {
-                    console.error("Unable to save post.", err);
-                    Notification.show({
-                      message: "Oh no, I can't update the content. 😟 ",
-                      intent: Intent.DANGER,
-                      icon: "delete",
-                    });
-                  }
-                }, //Disable default browser behavior
-              },
-            ]}
+            style={{
+              minHeight: "90vh",
+              minWidth: "100vw",
+              fontSize: userPreferences.editorFontSize || 14,
+              fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
+            }}
+            onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+              if (event.ctrlKey && event.key === "s") {
+                event.preventDefault();
+                onSave();
+              }
+            }}
           />
         </div>
       </>
