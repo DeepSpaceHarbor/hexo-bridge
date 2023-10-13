@@ -18,6 +18,7 @@ function setupHelpers(req, res, next) {
     res.end(toJsonFromHexo(data));
   };
   res.sendSuccess = (data) => {
+    res.setHeader("Content-Type", "application/json");
     res.end(toJson(data));
   };
   res.sendError = (errorMessage) => {
