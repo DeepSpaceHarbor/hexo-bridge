@@ -22,8 +22,6 @@ body {
 }
 
 .grid {
-  display: -webkit-box; /* Not needed if autoprefixing */
-  display: -ms-flexbox; /* Not needed if autoprefixing */
   display: flex;
   margin-left: -5px; /* gutter size offset */
   width: 90vw;
@@ -149,7 +147,7 @@ body {
 }
 
 .padding-left {
-  padding-left: 5px;
+  padding-left: 5px !important;
 }
 
 .padding-right {
@@ -158,8 +156,4 @@ body {
 
 .padding-top {
   padding-top: 5px;
-}
-
-/* Misc - edge cases */
-.new-folder-reset-input-padding > input {
 }
