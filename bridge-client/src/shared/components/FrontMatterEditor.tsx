@@ -4,7 +4,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import useAPI from "../useAPI";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 
-const frontMatterHelper = require("hexo-front-matter");
+import * as frontMatterHelper from "hexo-front-matter";
 
 type FrontMatterEditorProps = {
   value: string;
@@ -32,7 +32,7 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
 
   function validateFrontMatter(): boolean {
     try {
-      frontMatterHelper.parse(metaData);
+      frontMatterHelper.parse(metaData, {});
       if (!metaData.trim().endsWith("---")) {
         setErrorMarker({
           row: metaData.split("\n").length - 1,

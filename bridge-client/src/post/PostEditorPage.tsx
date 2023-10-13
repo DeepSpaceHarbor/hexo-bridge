@@ -5,7 +5,7 @@ import useAPI from "../shared/useAPI";
 import { Button, ButtonGroup, Card, ControlGroup, Divider, InputGroup, Intent, Spinner } from "@blueprintjs/core";
 import PostEditorActionDropdown from "./PostEditorActionDropdown";
 import { Notification } from "../index";
-import { DatePicker } from "@blueprintjs/datetime";
+import { DatePicker3 } from "@blueprintjs/datetime2";
 import FrontMatterEditor from "../shared/components/FrontMatterEditor";
 import { parsePostData, validateRequiredPostMetadataFields } from "../shared/helpers/frontMatterParserHelper";
 import AceEditor from "react-ace";
@@ -15,8 +15,8 @@ import "ace-builds/src-min-noconflict/ext-searchbox";
 import GenericError from "../shared/components/GenericError";
 import axios, { AxiosRequestConfig } from "axios";
 import { Popover2 } from "@blueprintjs/popover2";
-const qs = require("qs");
-const frontMatterHelper = require("hexo-front-matter");
+import { stringify } from "qs";
+import * as frontMatterHelper from "hexo-front-matter";
 
 //API Config
 const getSinglePostAPI: AxiosRequestConfig = {
@@ -141,11 +141,11 @@ export default function PostEditorPage() {
                     padding: "0px",
                   }}
                 >
-                  <DatePicker
+                  <DatePicker3
                     value={new Date(metadata.date)}
-                    onChange={(selectedDate: Date, isUserChange: boolean) => {
+                    onChange={(selectedDate: Date | null, isUserChange: boolean) => {
                       if (isUserChange) {
-                        setMetadata({ ...metadata, date: selectedDate.toISOString() });
+                        setMetadata({ ...metadata, date: selectedDate?.toISOString() ?? "" });
                         setHasUnsavedChanges(true);
                       }
                     }}
@@ -211,17 +211,17 @@ export default function PostEditorPage() {
                 name: "SavePost",
                 bindKey: { win: "Ctrl-S", mac: "Ctrl-S" },
                 exec: async (editor) => {
-                  let requestConfig = {
+                  let requestConfig: AxiosRequestConfig = {
                     ...updatePostContentAPI,
                     data: {
                       id: id,
                       content: editor.getSession().getValue(),
                     },
                   };
-                  requestConfig.baseURL = `${process.env.REACT_APP_API || ""}/api/`;
+                  requestConfig.baseURL = import.meta.env.VITE_API;
                   //Why urlencoded instead of json?
                   //https://github.com/axios/axios/issues/1610#issuecomment-492564113
-                  requestConfig.data = qs.stringify(requestConfig.data);
+                  requestConfig.data = stringify(requestConfig.data);
                   try {
                     await axios(requestConfig);
                     Notification.show({

@@ -1,4 +1,5 @@
 bridge-client/build/
+bridge-client/dist/
 bridge-client/node_modules/
 bridge-client/.idea/
 bridge-client/.eslintcache

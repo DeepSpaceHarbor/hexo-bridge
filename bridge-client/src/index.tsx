@@ -1,6 +1,11 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
+import "normalize.css/normalize.css";
+import "@blueprintjs/core//lib/css/blueprint.css";
+
+import "@blueprintjs/datetime2/lib/css/blueprint-datetime2.css";
+import "@blueprintjs/select/lib/css/blueprint-select.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AllPostsPage from "./post/AllPostsPage";
 import PostEditorPage from "./post/PostEditorPage";
@@ -16,7 +21,7 @@ import InstalledThemesPage from "./theme/installed/InstalledThemesPage";
 import DiscoverThemesPage from "./theme/discover/DiscoverThemesPage";
 import ThemeSettingsPage from "./theme/ThemeSettingsPage";
 import FileDirectoryPage from "./file/FileDirectoryPage";
-import { Toaster } from "@blueprintjs/core";
+import { OverlayToaster, Position, Toaster } from "@blueprintjs/core";
 
 const root = createRoot(document.getElementById("app")!);
 root.render(
@@ -43,11 +48,7 @@ root.render(
   </BrowserRouter>
 );
 
-export let Notification: Toaster;
-createRoot(document.getElementById("toaster")!).render(
-  <Toaster
-    ref={(instance) => {
-      Notification = instance!;
-    }}
-  />
-);
+export let Notification = OverlayToaster.create({
+  className: "toaster",
+  position: Position.TOP,
+});

@@ -1,4 +1,4 @@
-const frontMatterHelper = require("hexo-front-matter");
+import * as frontMatterHelper from "hexo-front-matter";
 
 export function parsePageData(pageData: object) {
   try {
@@ -49,7 +49,7 @@ export function parsePostData(postData: object) {
 }
 
 export function validateRequiredPostMetadataFields(data: string) {
-  let meta = frontMatterHelper.parse(data);
+  let meta = frontMatterHelper.parse(data, {});
   if (!meta.title) {
     // @ts-ignore
     meta.title = "Hello world";
@@ -70,7 +70,7 @@ export function validateRequiredPostMetadataFields(data: string) {
 }
 
 export function validateRequiredPageMetadataFields(data: string) {
-  let meta = frontMatterHelper.parse(data);
+  let meta = frontMatterHelper.parse(data, {});
   if (!meta.title) {
     // @ts-ignore
     meta.title = "Hello world";

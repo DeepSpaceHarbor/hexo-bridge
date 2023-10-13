@@ -13,8 +13,8 @@ import "ace-builds/src-noconflict/theme-xcode";
 import "ace-builds/src-noconflict/mode-markdown";
 import "ace-builds/src-min-noconflict/ext-searchbox";
 import axios, { AxiosRequestConfig } from "axios";
-const qs = require("qs");
-const frontMatterHelper = require("hexo-front-matter");
+import { stringify } from "qs";
+import * as frontMatterHelper from "hexo-front-matter";
 
 //API Config section
 const getSinglePageAPI: AxiosRequestConfig = {
@@ -160,17 +160,17 @@ export default function PageEditorPage() {
                 name: "SavePage",
                 bindKey: { win: "Ctrl-S", mac: "Ctrl-S" },
                 exec: async (editor) => {
-                  let requestConfig = {
+                  let requestConfig: AxiosRequestConfig = {
                     ...updatePageContentAPI,
                     data: {
                       id: id,
                       content: editor.getSession().getValue(),
                     },
                   };
-                  requestConfig.baseURL = `${process.env.REACT_APP_API || ""}/api/`;
+                  requestConfig.baseURL = import.meta.env.VITE_API;
                   //Why urlencoded instead of json?
                   //https://github.com/axios/axios/issues/1610#issuecomment-492564113
-                  requestConfig.data = qs.stringify(requestConfig.data);
+                  requestConfig.data = stringify(requestConfig.data);
                   try {
                     await axios(requestConfig);
                     Notification.show({
@@ -187,7 +187,7 @@ export default function PageEditorPage() {
                       icon: "delete",
                     });
                   }
-                }, //Disable default browser behavior
+                },
               },
             ]}
           />

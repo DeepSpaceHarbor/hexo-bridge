@@ -11,11 +11,10 @@ import sqlFile from "./icons/fileTypes/file-sql.png";
 import jsonFile from "./icons/fileTypes/file-json.png";
 import archiveFile from "./icons/fileTypes/file-archive.png";
 import emailFile from "./icons/fileTypes/file-email.png";
-
-const isImage = require("is-image");
-const isTextPath = require("is-text-path");
-const isVideo = require("is-video");
-const isAudio = require("is-audio");
+import { isImage } from "./fileTypeDetection/isImage";
+import { isText } from "./fileTypeDetection/isText";
+import { isVideo } from "./fileTypeDetection/isVideo";
+import { isAudio } from "./fileTypeDetection/isAudio";
 
 export default function getIcon(file: FileInfo) {
   if (file.filePath.endsWith(".pdf")) {
@@ -57,7 +56,7 @@ export default function getIcon(file: FileInfo) {
     return imageFile;
   }
 
-  if (isTextPath(file.filePath)) {
+  if (isText(file.filePath)) {
     return textFile;
   }
 

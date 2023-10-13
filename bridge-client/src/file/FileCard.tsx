@@ -6,8 +6,7 @@ import { Notification } from "../index";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../shared/useAPI";
 import RenameItem from "./RenameItem";
-
-const isImage = require("is-image");
+import { isImage } from "./fileTypeDetection/isImage";
 
 const deleteFileAPI: AxiosRequestConfig = {
   method: "POST",

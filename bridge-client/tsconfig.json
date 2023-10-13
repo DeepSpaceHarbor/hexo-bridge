@@ -3,17 +3,13 @@
     "hexo"
   ],
   "compilerOptions": {
-    "target": "es2017",
+    "target": "ESNext",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    "paths": {
-      "path": [
-        "./node_modules/path-browserify"
-      ]
-    },
+    "types": ["vite/client"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -29,6 +25,6 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": [
-    "src"
+    "src",
   ]
 }
