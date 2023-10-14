@@ -20,8 +20,11 @@ import FrontMatterEditor from "../shared/components/FrontMatterEditor";
 import { parsePostData, validateRequiredPostMetadataFields } from "../shared/helpers/frontMatterParserHelper";
 import GenericError from "../shared/components/GenericError";
 import { AxiosRequestConfig } from "axios";
-import CodeEditor from "@uiw/react-textarea-code-editor";
 import * as frontMatterHelper from "hexo-front-matter";
+import CodeMirror from "@uiw/react-codemirror";
+import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
+import { languages } from "@codemirror/language-data";
+import { EditorView } from "@codemirror/view";
 
 //API Config
 const getSinglePostAPI: AxiosRequestConfig = {
@@ -187,21 +190,19 @@ export default function PostEditorPage() {
           </ButtonGroup>
         </ControlGroup>
         <div className="code-editor-preview-container">
-          <CodeEditor
+          <CodeMirror
+            width="99vmax"
+            height="90vh"
             value={content}
-            language="markdown"
-            placeholder="Lorem ipsum dolor sit amet..."
-            onChange={(evn) => {
-              setContent(evn.target.value.trim());
+            style={{
+              fontSize: userPreferences.editorFontSize || 14,
+            }}
+            extensions={[markdown({ base: markdownLanguage, codeLanguages: languages }), EditorView.lineWrapping]}
+            onChange={(newContent) => {
+              setContent(newContent.trim());
               setHasUnsavedChanges(true);
             }}
-            style={{
-              minHeight: "90vh",
-              minWidth: "100vw",
-              fontSize: userPreferences.editorFontSize || 14,
-              fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-            }}
-            onKeyDown={(event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+            onKeyDown={(event) => {
               if (event.ctrlKey && event.key === "s") {
                 event.preventDefault();
                 onSave();
