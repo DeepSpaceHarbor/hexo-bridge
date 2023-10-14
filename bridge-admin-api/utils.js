@@ -1,6 +1,5 @@
 const path = require("path");
 const fs = require("hexo-fs");
-const mime = require("mime");
 
 function getCircularReplacer() {
   const seen = new WeakSet();
@@ -41,7 +40,6 @@ function serveClientFiles(req, res) {
   }
   //Removes '/bridge/' from path. Formats the filename to the proper separator for the current os.
   let filePath = path.join(__dirname, "www", req.originalUrl.split("/bridge/")[1].split("/").join(path.sep));
-  res.setHeader("Content-Type", mime.getType(filePath));
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     file = fs.readFileSync(filePath);
   } else {

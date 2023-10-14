@@ -40,7 +40,7 @@ hexo.extend.filter.register("server_middleware", (app) => {
   themes.setup(hexo);
 
   //Serve files from the client web app
-  app.use(hexo.config.root + "bridge/static/", serveStatic(path.join(__dirname, "www/static")));
+  app.use(hexo.config.root + "bridge/assets/", serveStatic(path.join(__dirname, "www/assets")));
   app.use(hexo.config.root + "bridge/", serveClientFiles);
 
   //API:MISC
