@@ -5,15 +5,15 @@ import { AxiosRequestConfig } from "axios";
 import useAPI from "../../shared/useAPI";
 import { Button, ButtonGroup, Card, ControlGroup, Intent, Menu, MenuItem, Spinner, Popover } from "@blueprintjs/core";
 import GenericError from "../../shared/components/GenericError";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/theme-xcode";
-import "ace-builds/src-noconflict/mode-markdown";
-import "ace-builds/src-min-noconflict/ext-searchbox";
 import { Notification } from "../../index";
 import RenameScaffold from "./RenameScaffold";
 import DeleteScaffold from "./DeleteScaffold";
 import { scaffold } from "./types";
 import NewScaffold from "./NewScaffold";
+import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
+import { StreamLanguage } from "@codemirror/language";
+import { yaml } from "@codemirror/legacy-modes/mode/yaml";
 
 // API Config
 const getAllScaffolds: AxiosRequestConfig = {
@@ -139,23 +139,21 @@ export default function ScaffoldsPage() {
             <Button icon="caret-down" minimal />
           </Popover>
         </ControlGroup>
-        <AceEditor
-          height="80vh"
+        <CodeMirror
           width="99vw"
-          style={{ margin: "5px" }}
-          mode="yaml"
-          theme="xcode"
-          onChange={(newContent: string) => {
+          height="83vh"
+          value={selectedScaffold.content}
+          style={{
+            fontSize: userPreferences.editorFontSize || 14,
+          }}
+          extensions={[StreamLanguage.define(yaml), EditorView.lineWrapping]}
+          onChange={(newContent) => {
             setSelectedScaffold({
               ...selectedScaffold,
               content: newContent,
             });
             setHasNewChanges(true);
           }}
-          value={selectedScaffold.content}
-          fontSize={userPreferences.editorFontSize || 14}
-          showPrintMargin={false}
-          editorProps={{ $blockScrolling: true }}
         />
       </>
     );
