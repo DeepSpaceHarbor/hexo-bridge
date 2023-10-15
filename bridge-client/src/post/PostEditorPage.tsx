@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import Navigation from "../shared/components/Navigation";
 import { useParams } from "react-router-dom";
 import useAPI from "../shared/useAPI";
@@ -25,6 +25,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
 import { EditorView } from "@codemirror/view";
+import { UserPreferencesContext } from "../shared/userPreferencesContext";
 
 //API Config
 const getSinglePostAPI: AxiosRequestConfig = {
@@ -37,14 +38,9 @@ const savePostAPI: AxiosRequestConfig = {
   url: "posts/save",
 };
 
-const getUserPreferencesAPI: AxiosRequestConfig = {
-  method: "GET",
-  url: "settings/bridge/getAsJson",
-};
-
 export default function PostEditorPage() {
   const { id } = useParams();
-  const { data: userPreferences } = useAPI(getUserPreferencesAPI);
+  const userPreferences = useContext(UserPreferencesContext);
   //Get post from api, setup code editor, preview & parse front matter for metadata.
   const {
     loading: isLoading,
@@ -193,11 +189,12 @@ export default function PostEditorPage() {
           <CodeMirror
             width="99vmax"
             height="90vh"
-            value={content}
+            theme={userPreferences.editorTheme}
             style={{
-              fontSize: userPreferences.editorFontSize || 14,
+              fontSize: userPreferences.editorFontSize,
             }}
             extensions={[markdown({ base: markdownLanguage, codeLanguages: languages }), EditorView.lineWrapping]}
+            value={content}
             onChange={(newContent) => {
               setContent(newContent.trim());
               setHasUnsavedChanges(true);

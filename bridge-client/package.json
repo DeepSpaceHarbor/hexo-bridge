@@ -14,6 +14,8 @@
     "@codemirror/legacy-modes": "^6.3.3",
     "@codemirror/lint": "^6.4.2",
     "@codemirror/view": "^6.21.3",
+    "@lezer/highlight": "^1.1.6",
+    "@uiw/codemirror-theme-github": "^4.21.20",
     "@uiw/react-codemirror": "^4.21.20",
     "axios": "^1.5.1",
     "hexo-front-matter": "^4.1.0",

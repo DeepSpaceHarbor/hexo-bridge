@@ -4,6 +4,7 @@
         "blueprintjs",
         "codemirror",
         "frontmatter",
+        "lezer",
         "lightbox",
         "mbox",
         "noconflict",

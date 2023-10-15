@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navigation from "../shared/components/Navigation";
 import { ControlGroup, Divider, InputGroup, Spinner } from "@blueprintjs/core";
 import useAPI from "../shared/useAPI";
@@ -10,15 +10,11 @@ import { AxiosRequestConfig } from "axios";
 import PostList from "./PostList";
 import search from "../shared/helpers/searchHelper";
 import type { Post } from "./types/types";
+import { UserPreferencesContext } from "../shared/userPreferencesContext";
 
 const getAllPostsAPI: AxiosRequestConfig = {
   method: "GET",
   url: "posts/getAll",
-};
-
-const getUserPrefsAPI: AxiosRequestConfig = {
-  method: "GET",
-  url: "settings/bridge/getAsJson",
 };
 
 export default function AllPostsPage() {
@@ -27,8 +23,8 @@ export default function AllPostsPage() {
   //All posts which match the user criteria. Ex: posts which contain hexo in the title.
   const [currentPostSelection, setCurrentPostSelection] = useState<Post[]>(new Array<Post>());
   //Paging related
-  const { loading: isUserPrefsLoading, data: userPrefs } = useAPI(getUserPrefsAPI);
-  const postsPerPage = userPrefs.post_list_itemsPerPage || 4;
+  const userPreferences = useContext(UserPreferencesContext);
+  const postsPerPage = userPreferences.post_list_itemsPerPage;
   const [currentPagePosts, setCurrentPagePosts] = useState<Post[]>(new Array<Post>());
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
 
@@ -57,7 +53,7 @@ export default function AllPostsPage() {
   }
 
   function getCurrentState() {
-    if (isLoading || isUserPrefsLoading) {
+    if (isLoading) {
       return <Spinner />;
     }
 
@@ -83,8 +79,8 @@ export default function AllPostsPage() {
         <div className="list-preview-container">
           <PostList
             posts={currentPagePosts}
-            showCategories={userPrefs.post_list_showCategories}
-            showTags={userPrefs.post_list_showTags}
+            showCategories={userPreferences.post_list_showCategories}
+            showTags={userPreferences.post_list_showTags}
           />
         </div>
       </>

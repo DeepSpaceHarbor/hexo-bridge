@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import Navigation from "../shared/components/Navigation";
 import { useParams } from "react-router-dom";
 import useAPI from "../shared/useAPI";
@@ -14,6 +14,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
 import { EditorView } from "@codemirror/view";
+import { UserPreferencesContext } from "../shared/userPreferencesContext";
 
 //API Config section
 const getSinglePageAPI: AxiosRequestConfig = {
@@ -26,14 +27,9 @@ const savePageAPI: AxiosRequestConfig = {
   url: "pages/save",
 };
 
-const getUserPreferencesAPI: AxiosRequestConfig = {
-  method: "GET",
-  url: "settings/bridge/getAsJson",
-};
-
 export default function PageEditorPage() {
   const { id } = useParams();
-  const { data: userPreferences } = useAPI(getUserPreferencesAPI);
+  const userPreferences = useContext(UserPreferencesContext);
   //Get page from api
   const {
     loading: isLoading,

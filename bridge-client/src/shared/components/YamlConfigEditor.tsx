@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Callout, ControlGroup, Intent, Spinner } from "@blueprintjs/core";
 import { Notification } from "../../index";
 import GenericError from "./GenericError";
@@ -9,6 +9,7 @@ import { EditorView } from "@codemirror/view";
 import { StreamLanguage } from "@codemirror/language";
 import { linter, Diagnostic, lintGutter } from "@codemirror/lint";
 import { yaml } from "@codemirror/legacy-modes/mode/yaml";
+import { UserPreferencesContext } from "../userPreferencesContext";
 
 type YamlConfigEditorProps = {
   getContentConfig: AxiosRequestConfig;
@@ -19,13 +20,9 @@ const yamlValidation: AxiosRequestConfig = {
   method: "POST",
   url: "settings/validateYaml",
 };
-const getUserPreferences: AxiosRequestConfig = {
-  method: "GET",
-  url: "settings/bridge/getAsJson",
-};
 
 export default function YamlConfigEditor(props: YamlConfigEditorProps) {
-  const { data: userPreferences } = useAPI(getUserPreferences);
+  const userPreferences = useContext(UserPreferencesContext);
   const { loading: isLoading, error, data: configData } = useAPI(props.getContentConfig);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [config, setConfig] = useState("");
@@ -125,11 +122,12 @@ export default function YamlConfigEditor(props: YamlConfigEditorProps) {
         <CodeMirror
           width="99vw"
           height="83vh"
-          value={config}
+          theme={userPreferences.editorTheme}
           style={{
             fontSize: userPreferences.editorFontSize || 14,
           }}
           extensions={[StreamLanguage.define(yaml), EditorView.lineWrapping, yamlLinter, lintGutter()]}
+          value={config}
           onChange={(newContent) => {
             setConfig(newContent);
             setHasUnsavedChanges(true);

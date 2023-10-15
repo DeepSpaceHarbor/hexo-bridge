@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navigation from "../shared/components/Navigation";
 import useAPI from "../shared/useAPI";
 import { ControlGroup, Divider, InputGroup, Spinner } from "@blueprintjs/core";
@@ -10,15 +10,12 @@ import { AxiosRequestConfig } from "axios";
 import GenericError from "../shared/components/GenericError";
 import search from "../shared/helpers/searchHelper";
 import type { Page } from "./types/types";
+import { UserPreferencesContext } from "../shared/userPreferencesContext";
 
 //API Config section
 const getAllPagesAPI: AxiosRequestConfig = {
   method: "GET",
   url: "pages/getAll",
-};
-const getUserPrefsAPI: AxiosRequestConfig = {
-  method: "GET",
-  url: "settings/bridge/getAsJson",
 };
 
 export default function AllPagesPage() {
@@ -27,8 +24,8 @@ export default function AllPagesPage() {
   //All pages which match the user criteria. Ex: pages which contain hexo in the title.
   const [currentPageSelection, setCurrentPageSelection] = useState<Page[]>(new Array<Page>());
   //Paging related
-  const { loading: isUserPrefsLoading, data: userPrefs } = useAPI(getUserPrefsAPI);
-  const itemsPerPage = userPrefs.page_list_itemsPerPage || 4;
+  const userPreferences = useContext(UserPreferencesContext);
+  const itemsPerPage = userPreferences.page_list_itemsPerPage;
   const [currentPageItems, setCurrentPageItems] = useState<Page[]>(new Array<Page>());
   const [currentPageNumber, setCurrentPageNumber] = useState(1);
 
@@ -57,7 +54,7 @@ export default function AllPagesPage() {
   }
 
   function getCurrentState() {
-    if (isLoading || isUserPrefsLoading) {
+    if (isLoading) {
       return <Spinner />;
     }
     if (error) {

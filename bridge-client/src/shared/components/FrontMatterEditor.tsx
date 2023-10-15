@@ -1,12 +1,12 @@
 import { Alert, Dialog, Intent } from "@blueprintjs/core";
-import { useEffect, useLayoutEffect, useState } from "react";
-import useAPI from "../useAPI";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { StreamLanguage } from "@codemirror/language";
 import { linter, Diagnostic, lintGutter } from "@codemirror/lint";
 import { yaml } from "@codemirror/legacy-modes/mode/yaml";
 import * as frontMatterHelper from "hexo-front-matter";
+import { UserPreferencesContext } from "../userPreferencesContext";
 
 type FrontMatterEditorProps = {
   value: string;
@@ -18,6 +18,8 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
   const [metaData, setMetadata] = useState("");
   const [errorMarker, setErrorMarker] = useState<Diagnostic>();
   const [canBeClosed, setCanBeClosed] = useState(true);
+  const userPreferences = useContext(UserPreferencesContext);
+
   useLayoutEffect(() => {
     setMetadata(value.trim());
   }, [value]);
@@ -26,11 +28,6 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
     validateFrontMatter();
     //eslint-disable-next-line
   }, [metaData]);
-
-  const { data: userPreferences } = useAPI({
-    method: "GET",
-    url: "settings/bridge/getAsJson",
-  });
 
   function validateFrontMatter(): boolean {
     try {
@@ -68,11 +65,10 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
   }
 
   const yamlLinter = linter((view) => {
-    let diagnostics: Diagnostic[] = [];
     if (errorMarker) {
-      diagnostics.push(errorMarker);
+      return [errorMarker];
     }
-    return diagnostics;
+    return [];
   });
 
   return (
@@ -91,11 +87,12 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
           width="100%"
           height="100%"
           maxHeight="80vh"
-          value={metaData}
+          theme={userPreferences.editorTheme}
           style={{
-            fontSize: userPreferences.editorFontSize || 14,
+            fontSize: userPreferences.editorFontSize,
           }}
           extensions={[StreamLanguage.define(yaml), EditorView.lineWrapping, yamlLinter, lintGutter()]}
+          value={metaData}
           onChange={(newContent) => {
             setMetadata(newContent);
           }}

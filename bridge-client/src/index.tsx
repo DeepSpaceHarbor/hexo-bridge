@@ -1,4 +1,3 @@
-import React from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import "normalize.css/normalize.css";
@@ -21,30 +20,33 @@ import DiscoverThemesPage from "./theme/discover/DiscoverThemesPage";
 import ThemeSettingsPage from "./theme/ThemeSettingsPage";
 import FileDirectoryPage from "./file/FileDirectoryPage";
 import { OverlayToaster } from "@blueprintjs/core";
+import { UserPreferencesContextProvider } from "./shared/userPreferencesContext";
 
 const root = createRoot(document.getElementById("app")!);
 root.render(
-  <BrowserRouter basename={"bridge"}>
-    <Routes>
-      <Route index element={<AllPostsPage />} />
-      <Route path="/" element={<AllPostsPage />} />
-      <Route path={`post`} element={<AllPostsPage />} />
-      <Route path={`post/edit/:id`} element={<PostEditorPage />} />
-      <Route path={`post/all`} element={<AllPostsPage />} />
-      <Route path={"/page/all"} element={<AllPagesPage />} />
-      <Route path={"/page/edit/:id"} element={<PageEditorPage />} />
-      <Route path={"/setting/hexo"} element={<HexoSettingsPage />} />
-      <Route path={"/setting/bridge"} element={<BridgeSettingsPage />} />
-      <Route path={"/setting/scaffolds"} element={<ScaffoldsPage />} />
-      <Route path={"/plugin/discover"} element={<DiscoverPluginsPage />} />
-      <Route path={"/plugin/installed"} element={<InstalledPluginsPage />} />
-      <Route path={"/plugin/script"} element={<ScriptsPage />} />
-      <Route path={"/theme/installed"} element={<InstalledThemesPage />} />
-      <Route path={"/theme/discover"} element={<DiscoverThemesPage />} />
-      <Route path={"/theme/config"} element={<ThemeSettingsPage />} />
-      <Route path={"/file"} element={<FileDirectoryPage />} />
-    </Routes>
-  </BrowserRouter>
+  <UserPreferencesContextProvider>
+    <BrowserRouter basename={"bridge"}>
+      <Routes>
+        <Route index element={<AllPostsPage />} />
+        <Route path="/" element={<AllPostsPage />} />
+        <Route path={`post`} element={<AllPostsPage />} />
+        <Route path={`post/edit/:id`} element={<PostEditorPage />} />
+        <Route path={`post/all`} element={<AllPostsPage />} />
+        <Route path={"/page/all"} element={<AllPagesPage />} />
+        <Route path={"/page/edit/:id"} element={<PageEditorPage />} />
+        <Route path={"/setting/hexo"} element={<HexoSettingsPage />} />
+        <Route path={"/setting/bridge"} element={<BridgeSettingsPage />} />
+        <Route path={"/setting/scaffolds"} element={<ScaffoldsPage />} />
+        <Route path={"/plugin/discover"} element={<DiscoverPluginsPage />} />
+        <Route path={"/plugin/installed"} element={<InstalledPluginsPage />} />
+        <Route path={"/plugin/script"} element={<ScriptsPage />} />
+        <Route path={"/theme/installed"} element={<InstalledThemesPage />} />
+        <Route path={"/theme/discover"} element={<DiscoverThemesPage />} />
+        <Route path={"/theme/config"} element={<ThemeSettingsPage />} />
+        <Route path={"/file"} element={<FileDirectoryPage />} />
+      </Routes>
+    </BrowserRouter>
+  </UserPreferencesContextProvider>
 );
 
 export let Notification: OverlayToaster;

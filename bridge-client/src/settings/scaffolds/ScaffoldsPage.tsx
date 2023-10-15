@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import Navigation from "../../shared/components/Navigation";
 import NavigationSettings from "../NavigationSettings";
 import { AxiosRequestConfig } from "axios";
@@ -14,6 +14,7 @@ import CodeMirror from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { StreamLanguage } from "@codemirror/language";
 import { yaml } from "@codemirror/legacy-modes/mode/yaml";
+import { UserPreferencesContext } from "../../shared/userPreferencesContext";
 
 // API Config
 const getAllScaffolds: AxiosRequestConfig = {
@@ -24,13 +25,9 @@ const saveScaffoldConfig: AxiosRequestConfig = {
   method: "POST",
   url: "scaffolds/save",
 };
-const getUserPreferences: AxiosRequestConfig = {
-  method: "GET",
-  url: "settings/bridge/getAsJson",
-};
 
 export default function ScaffoldsPage() {
-  const { data: userPreferences } = useAPI(getUserPreferences);
+  const userPreferences = useContext(UserPreferencesContext);
   const [hasNewChanges, setHasNewChanges] = useState(false);
   const { loading: isLoading, error, data: allScaffolds } = useAPI(getAllScaffolds);
   const [selectedScaffold, setSelectedScaffold] = useState<scaffold>({
@@ -142,11 +139,12 @@ export default function ScaffoldsPage() {
         <CodeMirror
           width="99vw"
           height="83vh"
-          value={selectedScaffold.content}
           style={{
             fontSize: userPreferences.editorFontSize || 14,
           }}
+          theme={userPreferences.editorTheme}
           extensions={[StreamLanguage.define(yaml), EditorView.lineWrapping]}
+          value={selectedScaffold.content}
           onChange={(newContent) => {
             setSelectedScaffold({
               ...selectedScaffold,

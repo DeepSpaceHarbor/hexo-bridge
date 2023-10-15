@@ -86,6 +86,10 @@ body {
   outline: none;
 }
 
+.cm-matchingBracket {
+  background-color: #efefef1f !important;
+}
+
 /*Files */
 .file-info-container {
   display: flex;

@@ -1,6 +1,6 @@
 import Navigation from "../shared/components/Navigation";
 import NavigationPlugins from "./NavigationPlugins";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../shared/useAPI";
 import { Button, Dialog, HTMLTable, NonIdealState, Spinner } from "@blueprintjs/core";
@@ -9,18 +9,15 @@ import { Script } from "./types/types";
 import CodeMirror from "@uiw/react-codemirror";
 import { EditorView } from "@codemirror/view";
 import { javascript } from "@codemirror/lang-javascript";
+import { UserPreferencesContext } from "../shared/userPreferencesContext";
 
 const scriptsAPI: AxiosRequestConfig = {
   method: "GET",
   url: "plugins/getScripts",
 };
-const getUserPreferences: AxiosRequestConfig = {
-  method: "GET",
-  url: "settings/bridge/getAsJson",
-};
 
 export default function ScriptsPage() {
-  const { data: userPreferences } = useAPI(getUserPreferences);
+  const userPreferences = useContext(UserPreferencesContext);
   const { loading: isLoading, error, data: allScripts } = useAPI(scriptsAPI);
   const [contentPreview, setContentPreview] = useState("");
   const [showPreview, setShowPreview] = useState(false);
@@ -86,6 +83,7 @@ export default function ScriptsPage() {
             maxHeight="80vh"
             editable={false}
             value={contentPreview}
+            theme={userPreferences.editorTheme}
             style={{
               fontSize: userPreferences.editorFontSize || 14,
             }}
