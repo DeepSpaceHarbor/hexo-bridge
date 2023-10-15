@@ -1,27 +1,26 @@
 import Navigation from "../shared/components/Navigation";
 import NavigationPlugins from "./NavigationPlugins";
-import React, { useState } from "react";
+import { useState } from "react";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../shared/useAPI";
 import { Button, Dialog, HTMLTable, NonIdealState, Spinner } from "@blueprintjs/core";
 import GenericError from "../shared/components/GenericError";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/theme-xcode";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-min-noconflict/ext-searchbox";
 import { Script } from "./types/types";
+import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
+import { javascript } from "@codemirror/lang-javascript";
 
 const scriptsAPI: AxiosRequestConfig = {
   method: "GET",
   url: "plugins/getScripts",
 };
-const getUserPrefs: AxiosRequestConfig = {
+const getUserPreferences: AxiosRequestConfig = {
   method: "GET",
   url: "settings/bridge/getAsJson",
 };
 
 export default function ScriptsPage() {
-  const { data: userPrefs } = useAPI(getUserPrefs);
+  const { data: userPreferences } = useAPI(getUserPreferences);
   const { loading: isLoading, error, data: allScripts } = useAPI(scriptsAPI);
   const [contentPreview, setContentPreview] = useState("");
   const [showPreview, setShowPreview] = useState(false);
@@ -44,7 +43,6 @@ export default function ScriptsPage() {
     }
     return (
       <>
-        {" "}
         <HTMLTable className="table" interactive>
           <thead>
             <tr>
@@ -82,17 +80,16 @@ export default function ScriptsPage() {
           onClose={() => setShowPreview(false)}
           style={{ width: "40vw" }}
         >
-          <AceEditor
-            height="50vh"
+          <CodeMirror
             width="fit-parent"
-            style={{ marginBottom: "-12px" }}
-            mode="javascript"
-            theme="xcode"
+            height="50vh"
+            maxHeight="80vh"
+            editable={false}
             value={contentPreview}
-            fontSize={userPrefs.editorFontSize || 14}
-            showPrintMargin={false}
-            readOnly
-            editorProps={{ $blockScrolling: true }}
+            style={{
+              fontSize: userPreferences.editorFontSize || 14,
+            }}
+            extensions={[javascript(), EditorView.lineWrapping]}
           />
         </Dialog>
       </>

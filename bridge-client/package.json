@@ -7,6 +7,7 @@
     "@blueprintjs/core": "^5.5.0",
     "@blueprintjs/datetime2": "^2.2.0",
     "@blueprintjs/select": "^5.0.15",
+    "@codemirror/lang-javascript": "^6.2.1",
     "@codemirror/lang-markdown": "^6.2.2",
     "@codemirror/language": "^6.9.1",
     "@codemirror/language-data": "^6.3.1",
