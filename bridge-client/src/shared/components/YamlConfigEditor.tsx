@@ -4,10 +4,11 @@ import { Notification } from "../../index";
 import GenericError from "./GenericError";
 import { AxiosRequestConfig } from "axios";
 import useAPI from "../useAPI";
-import AceEditor, { IAnnotation } from "react-ace";
-import "ace-builds/src-noconflict/theme-xcode";
-import "ace-builds/src-noconflict/mode-yaml";
-import "ace-builds/src-min-noconflict/ext-searchbox";
+import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
+import { StreamLanguage } from "@codemirror/language";
+import { linter, Diagnostic, lintGutter } from "@codemirror/lint";
+import { yaml } from "@codemirror/legacy-modes/mode/yaml";
 
 type YamlConfigEditorProps = {
   getContentConfig: AxiosRequestConfig;
@@ -18,13 +19,13 @@ const yamlValidation: AxiosRequestConfig = {
   method: "POST",
   url: "settings/validateYaml",
 };
-const getUserPrefs: AxiosRequestConfig = {
+const getUserPreferences: AxiosRequestConfig = {
   method: "GET",
   url: "settings/bridge/getAsJson",
 };
 
 export default function YamlConfigEditor(props: YamlConfigEditorProps) {
-  const { data: userPrefs } = useAPI(getUserPrefs);
+  const { data: userPreferences } = useAPI(getUserPreferences);
   const { loading: isLoading, error, data: configData } = useAPI(props.getContentConfig);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [config, setConfig] = useState("");
@@ -54,30 +55,22 @@ export default function YamlConfigEditor(props: YamlConfigEditorProps) {
     true
   );
 
-  const [errorMarkers, setErrorMarkers] = useState<Array<IAnnotation>>([]);
+  const [errorMarker, setErrorMarker] = useState<Diagnostic>();
   useEffect(() => {
     const validate = async () => {
       const res = await verifyYaml();
-      // @ts-ignore
-      if (res.data.error.length === 0) {
-        setErrorMarkers([]);
+      if (res && res.data.error.length === 0) {
+        setErrorMarker(undefined);
       } else {
-        setErrorMarkers([
-          {
-            // @ts-ignore
-            row: res.data.error.mark.line,
-            // @ts-ignore
-            column: 0,
-            // @ts-ignore
-            text: res.data.error.message,
-            // @ts-ignore
-            type: "error",
-          },
-        ]);
+        setErrorMarker({
+          from: res!.data.error.mark.position,
+          to: config.indexOf(" ", res!.data.error.mark.position),
+          message: res!.data.error.message,
+          severity: "error",
+        });
       }
     };
     validate();
-    //eslint-disable-next-line
   }, [config]);
 
   async function onSave() {
@@ -99,6 +92,14 @@ export default function YamlConfigEditor(props: YamlConfigEditorProps) {
     }
   }
 
+  const yamlLinter = linter((view) => {
+    let diagnostics: Diagnostic[] = [];
+    if (errorMarker) {
+      diagnostics.push(errorMarker);
+    }
+    return diagnostics;
+  });
+
   function getCurrentState() {
     if (isLoading) {
       return <Spinner />;
@@ -117,25 +118,22 @@ export default function YamlConfigEditor(props: YamlConfigEditorProps) {
             icon="floppy-disk"
             minimal
             text="Save"
-            disabled={!hasUnsavedChanges || errorMarkers.length !== 0}
+            disabled={!hasUnsavedChanges || Boolean(errorMarker)}
             onClick={onSave}
           />
         </ControlGroup>
-        <AceEditor
-          height="80vh"
+        <CodeMirror
           width="99vw"
-          style={{ margin: "5px" }}
-          mode="yaml"
-          theme="xcode"
-          annotations={errorMarkers}
-          onChange={(newContent: string) => {
+          height="83vh"
+          value={config}
+          style={{
+            fontSize: userPreferences.editorFontSize || 14,
+          }}
+          extensions={[StreamLanguage.define(yaml), EditorView.lineWrapping, yamlLinter, lintGutter()]}
+          onChange={(newContent) => {
             setConfig(newContent);
             setHasUnsavedChanges(true);
           }}
-          value={config}
-          fontSize={userPrefs.editorFontSize || 14}
-          showPrintMargin={false}
-          editorProps={{ $blockScrolling: true }}
         />
       </>
     );
