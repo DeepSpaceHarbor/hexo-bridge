@@ -4,9 +4,9 @@
         "blueprintjs",
         "codemirror",
         "frontmatter",
+        "lightbox",
         "mbox",
         "noconflict",
-        "rehype",
         "Unpublish"
     ]
 }
