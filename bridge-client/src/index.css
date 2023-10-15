@@ -82,6 +82,10 @@ body {
   margin-right: 7px;
 }
 
+.cm-editor.cm-focused {
+  outline: none;
+}
+
 /*Files */
 .file-info-container {
   display: flex;

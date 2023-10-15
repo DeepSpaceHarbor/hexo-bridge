@@ -1,9 +1,11 @@
-import { IAnnotation } from "react-ace";
-import { Alert, Callout, Dialog, Intent } from "@blueprintjs/core";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Alert, Dialog, Intent } from "@blueprintjs/core";
+import { useEffect, useLayoutEffect, useState } from "react";
 import useAPI from "../useAPI";
-import CodeEditor from "@uiw/react-textarea-code-editor";
-
+import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "@codemirror/view";
+import { StreamLanguage } from "@codemirror/language";
+import { linter, Diagnostic, lintGutter } from "@codemirror/lint";
+import { yaml } from "@codemirror/legacy-modes/mode/yaml";
 import * as frontMatterHelper from "hexo-front-matter";
 
 type FrontMatterEditorProps = {
@@ -14,7 +16,7 @@ type FrontMatterEditorProps = {
 
 export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatterEditorProps) {
   const [metaData, setMetadata] = useState("");
-  const [errorMarker, setErrorMarker] = useState<IAnnotation>();
+  const [errorMarker, setErrorMarker] = useState<Diagnostic>();
   const [canBeClosed, setCanBeClosed] = useState(true);
   useLayoutEffect(() => {
     setMetadata(value.trim());
@@ -25,7 +27,7 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
     //eslint-disable-next-line
   }, [metaData]);
 
-  const { data: userPrefs } = useAPI({
+  const { data: userPreferences } = useAPI({
     method: "GET",
     url: "settings/bridge/getAsJson",
   });
@@ -35,10 +37,10 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
       frontMatterHelper.parse(metaData, {});
       if (!metaData.trim().endsWith("---")) {
         setErrorMarker({
-          row: metaData.split("\n").length - 1,
-          column: 0,
-          text: "Front matter must end with ---",
-          type: "error",
+          from: metaData.length,
+          to: metaData.length + 1,
+          message: "Front matter must end with ---",
+          severity: "error",
         });
         return false;
       }
@@ -46,10 +48,10 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
       return true;
     } catch (error: any) {
       setErrorMarker({
-        row: error.mark.line,
-        column: 0,
-        text: error.message,
-        type: "error",
+        from: error.mark.position,
+        to: metaData.indexOf(" ", error.mark.position),
+        message: error.message,
+        severity: "error",
       });
       return false;
     }
@@ -65,6 +67,14 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
     }
   }
 
+  const yamlLinter = linter((view) => {
+    let diagnostics: Diagnostic[] = [];
+    if (errorMarker) {
+      diagnostics.push(errorMarker);
+    }
+    return diagnostics;
+  });
+
   return (
     <>
       <Dialog
@@ -77,44 +87,19 @@ export default function FrontMatterEditor({ value, onClose, isOpen }: FrontMatte
           minWidth: "60%",
         }}
       >
-        <div
+        <CodeMirror
+          width="100%"
+          height="100%"
+          maxHeight="80vh"
+          value={metaData}
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gridTemplateRows: "1fr",
-            gridColumnGap: "0px",
-            gridRowGap: "0px",
+            fontSize: userPreferences.editorFontSize || 14,
           }}
-        >
-          <CodeEditor
-            value={metaData}
-            language="yaml"
-            placeholder="Please enter frontmatter in yaml format."
-            onChange={(evn) => setMetadata(evn.target.value.trim())}
-            padding={15}
-            style={{
-              fontSize: userPrefs.editorFontSize || 14,
-              fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-            }}
-          />
-          <Callout
-            title={errorMarker ? "Front matter contains errors." : "Front matter is valid."}
-            intent={errorMarker ? Intent.DANGER : Intent.SUCCESS}
-            icon={errorMarker ? "code" : "endorsed"}
-            style={{
-              width: "100%",
-            }}
-          >
-            <CodeEditor
-              value={errorMarker ? errorMarker?.text : metaData}
-              disabled
-              language="yaml"
-              style={{
-                fontFamily: "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
-              }}
-            />
-          </Callout>
-        </div>
+          extensions={[StreamLanguage.define(yaml), EditorView.lineWrapping, yamlLinter, lintGutter()]}
+          onChange={(newContent) => {
+            setMetadata(newContent);
+          }}
+        />
         <Alert
           isOpen={!canBeClosed}
           intent={Intent.PRIMARY}

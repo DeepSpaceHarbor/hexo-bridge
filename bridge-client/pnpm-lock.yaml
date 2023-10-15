@@ -17,9 +17,18 @@ dependencies:
   '@codemirror/lang-markdown':
     specifier: ^6.2.2
     version: 6.2.2
+  '@codemirror/language':
+    specifier: ^6.9.1
+    version: 6.9.1
   '@codemirror/language-data':
     specifier: ^6.3.1
     version: 6.3.1(@codemirror/state@6.3.0)(@codemirror/view@6.21.3)(@lezer/common@1.1.0)
+  '@codemirror/legacy-modes':
+    specifier: ^6.3.3
+    version: 6.3.3
+  '@codemirror/lint':
+    specifier: ^6.4.2
+    version: 6.4.2
   '@codemirror/view':
     specifier: ^6.21.3
     version: 6.21.3
