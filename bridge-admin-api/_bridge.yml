@@ -1,4 +1,4 @@
-# Font size for the code editor. Default is 14.
+# Font size for the code editor. The default is 14.
 editorFontSize: 14
 editorDarkMode: false
 # All posts page.
@@ -7,6 +7,6 @@ post_list_showCategories: true
 post_list_showTags: true
 # All pages page.
 page_list_itemsPerPage: 7
-# When new posts,pages, etc, are created, hexo needs to update its database before bridge is allowed to display the editor.
+# When new posts, pages, etc, are created, hexo needs to update its database before bridge is allowed to display the editor.
 # This config controls the waiting time before attempting to fetch the newly created content.
 content_fetch_timeout: 200 # Time is in milliseconds
