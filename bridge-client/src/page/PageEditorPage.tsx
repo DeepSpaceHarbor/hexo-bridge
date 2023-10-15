@@ -132,11 +132,12 @@ export default function PageEditorPage() {
           <CodeMirror
             width="99vmax"
             height="90vh"
-            value={content}
+            theme={userPreferences.editorTheme}
             style={{
               fontSize: userPreferences.editorFontSize || 14,
             }}
             extensions={[markdown({ base: markdownLanguage, codeLanguages: languages }), EditorView.lineWrapping]}
+            value={content}
             onChange={(newContent) => {
               setContent(newContent.trim());
               setHasUnsavedChanges(true);
