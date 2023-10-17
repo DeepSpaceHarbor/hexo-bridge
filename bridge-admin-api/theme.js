@@ -1,7 +1,7 @@
 const fs = require("hexo-fs");
 const path = require("path");
 const axios = require("axios");
-const yaml = require("js-yaml");
+const YAWN = require("yawn-yaml/cjs");
 let hexo = null;
 const ALL_THEMES_LIST_PATH = path.join(__dirname, "data", "themes.json");
 let THEME_CONFIG_PATH = null;
@@ -18,7 +18,7 @@ async function setup(hexoInstance) {
       method: "GET",
       url: "https://raw.githubusercontent.com/hexojs/site/master/source/_data/themes.yml",
     });
-    const allThemes = yaml.load(res.data);
+    const allThemes = new YAWN(res.data).toJSON();
     //Sort by tags
     let byTags = {
       all: {

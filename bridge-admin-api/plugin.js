@@ -1,7 +1,7 @@
 const fs = require("hexo-fs");
 const path = require("path");
 const axios = require("axios");
-const yaml = require("js-yaml");
+const YAWN = require("yawn-yaml/cjs");
 let hexo = null;
 const ALL_PLUGINS_LIST_PATH = path.join(__dirname, "data", "plugins.json");
 
@@ -14,7 +14,7 @@ async function setup(hexoInstance) {
       method: "GET",
       url: "https://raw.githubusercontent.com/hexojs/site/master/source/_data/plugins.yml",
     });
-    const allPlugins = yaml.load(res.data);
+    const allPlugins = new YAWN(res.data).toJSON();
     //Sort by tags
     let byTags = {
       all: {
