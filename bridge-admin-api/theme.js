@@ -1,7 +1,8 @@
 const fs = require("hexo-fs");
 const path = require("path");
 const axios = require("axios");
-const YAWN = require("yawn-yaml/cjs");
+const cheerio = require("cheerio");
+
 let hexo = null;
 const ALL_THEMES_LIST_PATH = path.join(__dirname, "data", "themes.json");
 let THEME_CONFIG_PATH = null;
@@ -13,36 +14,41 @@ async function setup(hexoInstance) {
     saveFile(THEME_CONFIG_PATH, "");
   }
   try {
-    //Download official theme list
-    const res = await axios({
-      method: "GET",
-      url: "https://raw.githubusercontent.com/hexojs/site/master/source/_data/themes.yml",
-    });
-    const allThemes = new YAWN(res.data).toJSON();
-    //Sort by tags
+    //Check if update is needed.
+    if (fs.existsSync(ALL_THEMES_LIST_PATH)) {
+      const currentData = JSON.parse(fs.readFileSync(ALL_THEMES_LIST_PATH));
+      // One day in milliseconds
+      const oneDay = 1000 * 60 * 60 * 24;
+      const diffInTime = new Date().getTime() - new Date(currentData.updated).getTime();
+      const diffInDays = Math.round(diffInTime / oneDay);
+      if (diffInDays < 7) {
+        return; //No need to update.
+      }
+    }
+
+    //Parse themes from the hexo website.
+    const res = await axios.get("https://hexo.io/themes/");
+    const $ = cheerio.load(res.data);
     let byTags = {
       all: {
         themes: [],
         count: 0,
       },
     };
-
-    allThemes.forEach((theme) => {
-      let screenShotURL = `https://raw.githubusercontent.com/hexojs/site/master/source/themes/screenshots/${theme.name}.png`;
-      let screenShotLowercaseURL = `https://raw.githubusercontent.com/hexojs/site/master/source/themes/screenshots/${theme.name.toLowerCase()}.png`;
-      theme.screenshot = screenShotURL;
-      //Known bugs
-      switch (theme.name) {
-        case "Type":
-          theme.screenshot = screenShotLowercaseURL;
-          break;
-        case "Vita":
-          theme.screenshot = screenShotLowercaseURL;
-          break;
-        case "Miracle":
-          theme.screenshot = screenShotLowercaseURL;
-          break;
-      }
+    $("#plugin-list > .plugin").each((i, el) => {
+      const name = $(el).find(".plugin-name").text().trim();
+      const description = $(el).find(".plugin-desc").text().trim();
+      const link = $(el).find(".plugin-name").attr("href");
+      const preview = $(el).find(".plugin-preview-link").attr("href");
+      const screenshot = "https://hexo.io" + $(el).find(".plugin-screenshot-img").attr("data-zoom-src");
+      const tags = [];
+      $(el)
+        .find(".plugin-tag")
+        .each((i, el) => {
+          tags.push($(el).text().trim());
+        });
+      //Sort the themes based on tags
+      const theme = { name, desc: description, link, preview, screenshot, tags };
       byTags.all.themes.push(theme);
       byTags.all.count += 1;
       theme.tags.forEach((tag) => {
@@ -57,14 +63,22 @@ async function setup(hexoInstance) {
         byTags[tag].count += 1;
       });
     });
-    fs.writeFile(ALL_THEMES_LIST_PATH, JSON.stringify(byTags));
+
+    fs.writeFile(
+      ALL_THEMES_LIST_PATH,
+      JSON.stringify({
+        updated: new Date().toDateString(),
+        themes: byTags,
+      })
+    );
   } catch (error) {
     //Do nothing, use the local file.
   }
 }
 
 function getAll() {
-  return JSON.parse(fs.readFileSync(ALL_THEMES_LIST_PATH));
+  const data = JSON.parse(fs.readFileSync(ALL_THEMES_LIST_PATH));
+  return data.themes;
 }
 
 function getConfig() {
