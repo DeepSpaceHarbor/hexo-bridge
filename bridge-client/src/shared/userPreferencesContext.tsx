@@ -32,7 +32,9 @@ export const UserPreferencesContext = createContext<UserPreferences>(defaultUser
 
 const bridgeDarkTheme = githubDarkInit({
   settings: {
-    lineHighlight: "#080808",
+    selection: "#090909",
+    selectionMatch: "transparent",
+    lineHighlight: "transparent",
   },
   styles: [
     {
