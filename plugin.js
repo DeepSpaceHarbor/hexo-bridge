@@ -1,28 +1,47 @@
 const fs = require("hexo-fs");
 const path = require("path");
 const axios = require("axios");
-const yaml = require("js-yaml");
+const cheerio = require("cheerio");
+
 let hexo = null;
 const ALL_PLUGINS_LIST_PATH = path.join(__dirname, "data", "plugins.json");
 
 async function setup(hexoInstance) {
   hexo = hexoInstance;
-
   try {
-    //Download official plugin list
-    const res = await axios({
-      method: "GET",
-      url: "https://raw.githubusercontent.com/hexojs/site/master/source/_data/plugins.yml",
-    });
-    const allPlugins = yaml.load(res.data);
-    //Sort by tags
+    //Check if update is needed.
+    if (fs.existsSync(ALL_PLUGINS_LIST_PATH)) {
+      const currentData = JSON.parse(fs.readFileSync(ALL_PLUGINS_LIST_PATH));
+      // One day in milliseconds
+      const oneDay = 1000 * 60 * 60 * 24;
+      const diffInTime = new Date().getTime() - new Date(currentData.updated).getTime();
+      const diffInDays = Math.round(diffInTime / oneDay);
+      if (diffInDays < 7) {
+        return; //No need to update.
+      }
+    }
+    //Parse the list of plugins from the hexo website.
+    const res = await axios.get("https://hexo.io/plugins/");
+    const $ = cheerio.load(res.data);
     let byTags = {
       all: {
         plugins: [],
         count: 0,
       },
     };
-    allPlugins.forEach((plugin) => {
+    $("#plugin-list > .plugin").each((i, el) => {
+      const name = $(el).find(".plugin-name").text().trim();
+      const description = $(el).find(".plugin-desc").text().trim();
+      const link = $(el).find(".plugin-name").attr("href");
+      const tags = [];
+      $(el)
+        .find(".plugin-tag")
+        .each((i, el) => {
+          tags.push($(el).text().trim());
+        });
+
+      //Sort the plugins based on tags.
+      const plugin = { name, description, link, tags };
       byTags.all.plugins.push(plugin);
       byTags.all.count += 1;
       plugin.tags.forEach((tag) => {
@@ -37,14 +56,23 @@ async function setup(hexoInstance) {
         byTags[tag].count += 1;
       });
     });
-    fs.writeFile(ALL_PLUGINS_LIST_PATH, JSON.stringify(byTags));
+
+    //Save the list of plugins to a file.
+    fs.writeFile(
+      ALL_PLUGINS_LIST_PATH,
+      JSON.stringify({
+        updated: new Date().toDateString(),
+        plugins: byTags,
+      })
+    );
   } catch (error) {
     //Do nothing, use the local file.
   }
 }
 
 function getAll() {
-  return JSON.parse(fs.readFileSync(ALL_PLUGINS_LIST_PATH));
+  const data = JSON.parse(fs.readFileSync(ALL_PLUGINS_LIST_PATH));
+  return data.plugins;
 }
 
 function getInstalled() {

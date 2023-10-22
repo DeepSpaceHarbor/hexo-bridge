@@ -1,6 +1,6 @@
 {
   "name": "hexo-bridge",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Admin panel for websites powered by hexo.",
   "keywords": [
     "hexo",
@@ -29,7 +29,8 @@
     "formidable": "^2.0.1",
     "hexo-front-matter": "^3.0.0",
     "hexo-fs": "^3.1.0",
-    "js-yaml": "^4.0.0",
-    "serve-static": "^1.14.1"
+    "yawn-yaml": "^1.5.0",
+    "serve-static": "^1.14.1",
+    "cheerio": "^1.0.0-rc.12"
   }
 }
