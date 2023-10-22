@@ -37,7 +37,7 @@ async function setup(hexoInstance) {
       $(el)
         .find(".plugin-tag")
         .each((i, el) => {
-          tags.push($(el).text());
+          tags.push($(el).text().trim());
         });
 
       //Sort the plugins based on tags.
