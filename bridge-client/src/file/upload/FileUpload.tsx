@@ -29,8 +29,9 @@ export default function FileUpload({ currentLocation, selectedFiles, reportStatu
       photoFormData.append("directory", currentLocation);
       try {
         await axios({
+          baseURL: import.meta.env.VITE_API,
           method: "POST",
-          url: "http://localhost:4000/api/assets/upload",
+          url: `assets/upload`,
           data: photoFormData,
           headers: {
             "Content-Type": 'multipart/form-data"',
