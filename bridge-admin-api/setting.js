@@ -3,7 +3,7 @@ const path = require("path");
 let hexo = null;
 let HEXO_CONFIG_PATH = null;
 let BRIDGE_CONFIG_PATH = null;
-const YAWN = require("yawn-yaml/cjs");
+const YAWN = require("yawn-yaml").default;
 
 function setup(hexoInstance) {
   hexo = hexoInstance;
