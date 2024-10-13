@@ -3,4 +3,5 @@ export type Page = {
   title: string;
   date: string;
   content: string;
+  source: string;
 };

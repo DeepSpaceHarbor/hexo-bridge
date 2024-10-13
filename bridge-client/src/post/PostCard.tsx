@@ -1,5 +1,5 @@
 import React from "react";
-import { Elevation, MenuItem, Button, Card, Divider, Menu, Popover } from "@blueprintjs/core";
+import { Elevation, MenuItem, Button, Card, Divider, Menu, Popover, Icon, Tooltip } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import type { Post } from "./types/types";
 
@@ -71,9 +71,26 @@ export default function PostCard({ post, selectedPost, setSelectedPost, showCate
   }
 
   return (
-    <Card className="card-list-item" interactive elevation={Elevation.ZERO} onClick={() => setSelectedPost(post)}>
+    <Card
+      className="card-list-item"
+      interactive
+      elevation={Elevation.ZERO}
+      onClick={() => {
+        setSelectedPost(post);
+      }}
+    >
       <Link className={post._id === selectedPost._id ? "selected-item" : undefined} to={`/post/edit/${post._id}`}>
-        <b>{post.title}</b>
+        {post.title ? (
+          <b>{post.title}</b>
+        ) : (
+          <Tooltip content="This post is missing a title" placement="top">
+            <div>
+              <Icon icon="error" />
+              &nbsp;
+              <b>{post.source}</b>
+            </div>
+          </Tooltip>
+        )}
       </Link>
       <Divider />
       <div className="bp4-text-muted" style={{ display: "flex" }}>

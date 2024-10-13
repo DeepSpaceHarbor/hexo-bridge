@@ -1,5 +1,5 @@
 import React from "react";
-import { Elevation } from "@blueprintjs/core";
+import { Elevation, Icon, Tooltip } from "@blueprintjs/core";
 import { Link } from "react-router-dom";
 import { Card, Divider } from "@blueprintjs/core";
 import type { Page } from "./types/types";
@@ -13,7 +13,17 @@ export default function PageCard({ page, selectedPage, setSelectedPage }: PageCa
   return (
     <Card className="card-list-item" interactive elevation={Elevation.ZERO} onClick={() => setSelectedPage(page)}>
       <Link className={page._id === selectedPage._id ? "selected-item" : undefined} to={`/page/edit/${page._id}`}>
-        <b>{page.title}</b>
+        {page.title ? (
+          <b>{page.title}</b>
+        ) : (
+          <Tooltip content="This page is missing a title" placement="top">
+            <div>
+              <Icon icon="error" />
+              &nbsp;
+              <b>{page.source}</b>
+            </div>
+          </Tooltip>
+        )}
       </Link>
       <Divider />
       <p className="bp4-text-muted">
