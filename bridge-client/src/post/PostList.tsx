@@ -10,7 +10,7 @@ type PostListProps = {
   showTags: boolean;
 };
 
-const undefinedPost = {
+const undefinedPost: Post = {
   _id: "",
   title: "",
   date: "",
@@ -18,6 +18,7 @@ const undefinedPost = {
   content: "",
   categories: [],
   tags: [],
+  source: "",
 };
 
 export default function PostList({ posts, showCategories, showTags }: PostListProps) {

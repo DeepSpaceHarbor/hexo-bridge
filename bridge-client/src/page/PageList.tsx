@@ -4,11 +4,12 @@ import PageCard from "./PageCard";
 import HtmlPreview from "../shared/components/HtmlPreview";
 import type { Page } from "./types/types";
 
-const undefinedPage = {
+const undefinedPage: Page = {
   _id: "",
   title: "",
   date: "",
   content: "",
+  source: "",
 };
 
 export default function PageList({ pages }: { pages: Page[] }) {
