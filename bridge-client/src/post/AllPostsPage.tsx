@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Navigation from "../shared/components/Navigation";
-import { ControlGroup, Divider, InputGroup, Spinner } from "@blueprintjs/core";
+import { Checkbox, ControlGroup, Divider, InputGroup, Spinner } from "@blueprintjs/core";
 import useAPI from "../shared/useAPI";
 import Pagination from "../shared/components/Pagination";
 import { sortByDate } from "../shared/helpers/sortByDate";
@@ -22,6 +22,9 @@ export default function AllPostsPage() {
   const { loading: isLoading, error, data: allPosts } = useAPI(getAllPostsAPI);
   //All posts which match the user criteria. Ex: posts which contain hexo in the title.
   const [currentPostSelection, setCurrentPostSelection] = useState<Post[]>(new Array<Post>());
+  // Search filters
+  const [titleSearchQuery, setTitleSearchQuery] = useState("");
+  const [draftsOnly, setDraftsOnly] = useState(false);
   //Paging related
   const userPreferences = useContext(UserPreferencesContext);
   const postsPerPage = userPreferences.post_list_itemsPerPage;
@@ -36,15 +39,25 @@ export default function AllPostsPage() {
     setCurrentPostSelection(sorted);
     setCurrentPageNumber(1);
     setCurrentPagePosts(getPageItems(sorted, 1, postsPerPage));
+    setDraftsOnly(false);
   }
 
-  //Search by title
-  function searchByTitle(searchQuery: string) {
-    const searchResult = search(searchQuery, allPosts, ["title"]).sort(sortByDate);
+  //Search by given filters
+  function searchBy(searchQuery: string = titleSearchQuery, filterByDrafts: boolean = draftsOnly) {
+    const searchResult = search(searchQuery, allPosts, ["title"])
+      .sort(sortByDate)
+      .filter((post: Post) => {
+        if (filterByDrafts) {
+          return !post.published;
+        }
+        return true;
+      });
     const firstPage = getPageItems(searchResult, 1, postsPerPage);
     setCurrentPostSelection(searchResult);
     setCurrentPagePosts(firstPage);
     setCurrentPageNumber(1);
+    setDraftsOnly(filterByDrafts);
+    setTitleSearchQuery(searchQuery);
   }
 
   function onPageChange(newPage: number) {
@@ -67,7 +80,8 @@ export default function AllPostsPage() {
             leftIcon="search"
             placeholder="Search"
             className="search-input"
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => searchByTitle(event.target.value)}
+            value={titleSearchQuery}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => searchBy(event.target.value, draftsOnly)}
           />
           <Divider />
           <Pagination
@@ -75,6 +89,16 @@ export default function AllPostsPage() {
             currentPage={currentPageNumber}
             onChange={onPageChange}
           />
+          <Divider />
+          <Checkbox
+            style={{ marginTop: "auto", marginBottom: "auto", marginLeft: 4 }}
+            checked={draftsOnly}
+            onChange={() => {
+              searchBy(titleSearchQuery, !draftsOnly);
+            }}
+          >
+            Show only drafts
+          </Checkbox>
         </ControlGroup>
         <div className="list-preview-container">
           <PostList
